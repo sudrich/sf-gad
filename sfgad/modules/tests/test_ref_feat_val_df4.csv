@@ -1,0 +1,3 @@
+name,type,age,time_window,time,VertexDegreeDifference
+scott.sefton@enron.com,USER,3.0,1,1999-01-05,2.0
+scott.sefton@enron.com,USER,3.0,2,1999-01-06,0.0

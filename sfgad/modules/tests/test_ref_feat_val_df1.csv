@@ -1,0 +1,3 @@
+name,type,age,time_window,time,VertexDegreeDifference
+mark.taylor@enron.com,USER,2.0,0,1999-01-04,6.0
+mark.taylor@enron.com,USER,2.0,1,1999-01-05,-2.0
