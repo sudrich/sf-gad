@@ -1,8 +1,9 @@
-from unittest import TestCase
 import pandas as pd
-from pandas.util.testing import assert_frame_equal
 
+from unittest import TestCase
+from pandas.util.testing import assert_frame_equal
 from sfgad.modules.feature.vertex_degree_difference import VertexDegreeDifference
+
 
 class TestVertexDegreeDifference(TestCase):
 
@@ -31,10 +32,10 @@ class TestVertexDegreeDifference(TestCase):
     def test_process_vertices(self):
         # test the calculation of vertex degree difference in the 1. time step ('df_1')
         result_df_1 = pd.DataFrame(data={'name': ['A', 'B', 'C'], 'VertexDegreeDifference': [2, 2, 2]},
-                                 columns=['name', 'VertexDegreeDifference'])
+                                   columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_1, 1), result_df_1)
 
         # test the calculation of vertex degree difference in the 2. time step ('df_1')
         result_df_2 = pd.DataFrame(data={'name': ['A', 'B', 'D'], 'VertexDegreeDifference': [1, -1, 2]},
-                                 columns=['name', 'VertexDegreeDifference'])
+                                   columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_2, 1), result_df_2)
