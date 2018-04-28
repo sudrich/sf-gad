@@ -1,1 +1,1 @@
-from .weighting_function import *
+from .weighting import *
