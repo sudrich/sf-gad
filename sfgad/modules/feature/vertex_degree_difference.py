@@ -9,9 +9,10 @@ class VertexDegreeDifference(Feature):
     It calculates the vertex degree difference only for the active nodes.
     """
 
-    def __init__(self):
+    def __init__(self, only_active_nodes=False):
         self.names = ['VertexDegreeDifference']
         self.previous_count_df = pd.DataFrame(columns=['name', 'VertexDegree'])
+        self.only_active_nodes = only_active_nodes
 
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
@@ -32,7 +33,10 @@ class VertexDegreeDifference(Feature):
         count_df = counts.to_frame().reset_index()
         count_df.columns = ['name', 'VertexDegree']
 
-        diff_df = pd.merge(count_df, self.previous_count_df, how='left', on=['name']).fillna(0)
+        # decide for which nodes the vertex degree difference should be calculated
+        how = 'left' if self.only_active_nodes else 'outer'
+
+        diff_df = pd.merge(count_df, self.previous_count_df, how=how, on=['name']).fillna(0)
         diff_df['VertexDegreeDifference'] = (diff_df['VertexDegree_x'] - diff_df['VertexDegree_y']).astype('int64')
 
         # update previous_count_df for the next time step

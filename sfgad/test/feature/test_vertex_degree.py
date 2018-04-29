@@ -23,5 +23,5 @@ class TestVertexDegree(TestCase):
     def test_process_vertices(self):
         # test the calculation of vertex degree on the example data frame 'df'
         result_df = pd.DataFrame(data={'name': ['A', 'B', 'C'], 'VertexDegree': [2, 2, 2]},
-                                 columns = ['name', 'VertexDegree'])
+                                 columns=['name', 'VertexDegree'])
         assert_frame_equal(self.feature.process_vertices(self.df, 1), result_df)
