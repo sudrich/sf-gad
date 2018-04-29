@@ -30,7 +30,7 @@ class TestVertexDegreeDifference(TestCase):
         self.assertEqual(self.feature.names, ['VertexDegreeDifference'])
         self.assertEqual(self.feature.only_active_nodes, False)
 
-    def test_process_vertices(self):
+    def test_process_vertices_all_nodes(self):
         # test the calculation of vertex degree difference for all nodes
 
         # test the calculation of vertex degree difference in the 1. time step ('df_1')
@@ -43,7 +43,7 @@ class TestVertexDegreeDifference(TestCase):
                                    columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_2, 1), result_df_2)
 
-    def test_process_vertices_2(self):
+    def test_process_vertices_active_nodes(self):
         # test the calculation of vertex degree difference only for active nodes
         self.feature = VertexDegreeDifference(only_active_nodes=True)
 
