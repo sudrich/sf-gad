@@ -20,13 +20,13 @@ class VertexDegreeDifferenceByType(Feature):
 
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
-        Iterates over the current data frame and calculates for each vertex the vertex degree difference by type.
+        Iterates over the current data frame and calculates for each vertex the vertex degree difference by edge type.
         :param df_edges: The data frame to process.
         :param n_jobs: The number of cores that are supported for multiprocessing.
         :param update_activity: True, if the feature should consider the new edges for future computations (if needed),
             false otherwise.
-        :return a data frame with the columns 'name' and 'VertexDegreeDifferenceByTYPE' for each existing type, and the
-            calculated vertex degree difference for all vertices and edge types in the given df_edges.
+        :return a data frame with the columns 'name' and 'VertexDegreeDifferenceByTYPE' for each existing edge type,
+            and the calculated vertex degree difference for all vertices and edge types in the given df_edges.
         """
 
         src_counts = df_edges.groupby(['SRC_NAME', 'E_TYPE']).size()

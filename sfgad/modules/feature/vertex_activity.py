@@ -9,7 +9,7 @@ class VertexActivity(Feature):
     least 1 incident edge, and 0 otherwise.
     """
 
-    def __init__(self, only_active_nodes=False):
+    def __init__(self):
         self.names = ['VertexActivity']
         self.nodes = []
 
@@ -31,9 +31,10 @@ class VertexActivity(Feature):
 
         # add inactive vertices to result_df
         inactive_nodes = [name for name in self.nodes if name not in active_nodes]
-        inactive_nodes_df = pd.DataFrame(data={'name': inactive_nodes, 'VertexActivity': 0},
-                                         columns=['name', 'VertexActivity'])
-        result_df = result_df.append(inactive_nodes_df).reset_index(drop=True)
+        if len(inactive_nodes) > 0:
+            inactive_nodes_df = pd.DataFrame(data={'name': inactive_nodes, 'VertexActivity': 0},
+                                             columns=['name', 'VertexActivity'])
+            result_df = result_df.append(inactive_nodes_df).reset_index(drop=True)
 
         # add new occurred vertices to self.nodes
         new_nodes = [name for name in active_nodes if name not in self.nodes]

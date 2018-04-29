@@ -40,7 +40,7 @@ class VertexDegreeByType(Feature):
         for col in missing_columns:
             count_df[col] = 0
 
-        return count_df
+        return count_df[['name'] + self.names]
 
     def compute(self, node_name, t):
         # Not needed here, since feature to simple for multi processoring
