@@ -38,7 +38,7 @@ class TestVertexDegreeDifference(TestCase):
                                    columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_1, 1), result_df_1)
 
-        # test the calculation of vertex degree difference in the 2. time step ('df_1')
+        # test the calculation of vertex degree difference in the 2. time step ('df_2')
         result_df_2 = pd.DataFrame(data={'name': ['A', 'B', 'D', 'C'], 'VertexDegreeDifference': [1, -1, 2, -2]},
                                    columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_2, 1), result_df_2)
@@ -52,7 +52,7 @@ class TestVertexDegreeDifference(TestCase):
                                    columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_1, 1), result_df_1)
 
-        # test the calculation of vertex degree difference in the 2. time step ('df_1')
+        # test the calculation of vertex degree difference in the 2. time step ('df_2')
         result_df_2 = pd.DataFrame(data={'name': ['A', 'B', 'D'], 'VertexDegreeDifference': [1, -1, 2]},
                                    columns=['name', 'VertexDegreeDifference'])
         assert_frame_equal(self.feature.process_vertices(self.df_2, 1), result_df_2)
