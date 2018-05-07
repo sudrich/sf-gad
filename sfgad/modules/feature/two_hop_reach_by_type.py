@@ -1,23 +1,30 @@
 import pandas as pd
 
 from .feature import Feature
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 
-class TwoHopReach(Feature):
+class TwoHopReachByType(Feature):
     """
-    The feature TwoHopReach of a single vertex is defined as the count of vertices in the 2-hop-neighborhood of a
-    vertex.
+    The feature TwoHopReachByType of a single vertex is defined as the count of vertices in the 2-hop-neighborhood of a
+    vertex grouped by vertex type.
+
+    All vertex types should appear in the result data frame as columns, even if there are no occurrences of this vertex
+    type in the current time step.
     """
 
-    def __init__(self):
-        self.names = ['TwoHopReach']
+    def __init__(self, vertex_types):
+        self.names = ['TwoHopReachBy' + str(vertex_type) for vertex_type in vertex_types]
+        self.vertex_types = vertex_types
 
         # mapping of nodes to numbers
         self.ids = {}
         self.node_count = 0
         # reverse mapping of numbers to nodes names
         self.inv_ids = {}
+
+        # mapping of node_ids to feature names based on vertex types
+        self.feature_names = {}
 
         # a dictionary, which contains a list for each node: the ids of the neighbors
         self.neighbors = defaultdict(list)
@@ -29,8 +36,8 @@ class TwoHopReach(Feature):
         :param n_jobs: The number of cores that are supported for multiprocessing.
         :param update_activity: True, if the feature should consider the new edges for future computations (if needed),
             false otherwise.
-        :return a data frame with the columns ['name', 'TwoHopReach'] and the calculated two-hop reach for all vertices
-            in the given df_edges.
+        :return a data frame with the columns 'name' and 'TwoHopReachByTYPE' for each existing vertex type,
+            and the calculated two_hop reach for all vertices and vertex types in the given df_edges.
         """
 
         # register nodes
@@ -39,13 +46,13 @@ class TwoHopReach(Feature):
             if node_name not in self.ids:
                 self.node_count = self.register_node(node_name, self.node_count)
 
-        # iterate over all edges and extract the neighbors
-        iterator = zip(df_edges["SRC_NAME"], df_edges["DST_NAME"])
-        for s, d in iterator:
-            self.interpret_edge(s, d)
+        # iterate over all edges, extract the neighbors and the vertex types
+        iterator = zip(df_edges['SRC_NAME'], df_edges['SRC_TYPE'], df_edges['DST_NAME'], df_edges['DST_TYPE'])
+        for s, s_type, d, d_type in iterator:
+            self.interpret_edge(s, s_type, d, d_type)
 
-        # count all vertices in the 2-hop-neighborhood for each vertex
-        two_hop_neighborhood = defaultdict(int)
+        # count all vertices types in the 2-hop-neighborhood for each vertex
+        two_hop_neighborhood = defaultdict(list)
         for v in self.neighbors:
             neighborhood = set(self.neighbors[v])
 
@@ -56,13 +63,19 @@ class TwoHopReach(Feature):
             neighborhood = list(neighborhood)
             neighborhood.remove(v)
 
-            two_hop_neighborhood[self.inv_ids[v]] = len(neighborhood)
+            two_hop_neighborhood[self.inv_ids[v]] = Counter([self.feature_names[neighbor] for neighbor in neighborhood])
 
-        # transform the dictionary to a data frame
-        result_df = pd.DataFrame(list(two_hop_neighborhood.items()), columns=['name', 'TwoHopReach'])
+        # create the result data frame
+        result_df = pd.DataFrame(columns=['name'] + self.names)
+        for v in two_hop_neighborhood:
+            data = two_hop_neighborhood[v]
+            data['name'] = v
+            result_df = result_df.append(data, ignore_index=True)
+
+        result_df = result_df.fillna(0)
 
         # reset all dictionaries
-        self.ids = self.inv_ids = {}
+        self.ids = self.inv_ids = self.types = {}
         self.node_count = 0
         self.neighbors = defaultdict(list)
 
@@ -86,7 +99,7 @@ class TwoHopReach(Feature):
 
         return node_count
 
-    def interpret_edge(self, s, d):
+    def interpret_edge(self, s, s_type, d, d_type):
         """
         Interprets the given edge by updating the node neighbors.
         :param s: The source node (name) of the edge.
@@ -102,6 +115,12 @@ class TwoHopReach(Feature):
         # update the neighbors
         self.update_neighbor(s, d)
         self.update_neighbor(d, s)
+
+        # map ids to types
+        if s not in self.feature_names:
+            self.feature_names[s] = 'TwoHopReachBy' + str(s_type)
+        if d not in self.feature_names:
+            self.feature_names[d] = 'TwoHopReachBy' + str(d_type)
 
     def update_neighbor(self, node_id, neighbor_id):
         """
