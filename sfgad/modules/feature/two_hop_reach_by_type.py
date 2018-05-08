@@ -17,16 +17,10 @@ class TwoHopReachByType(Feature):
         self.names = ['TwoHopReachBy' + str(vertex_type) for vertex_type in vertex_types]
         self.vertex_types = vertex_types
 
-        # mapping of nodes to numbers
-        self.ids = {}
-        self.node_count = 0
-        # reverse mapping of numbers to nodes names
-        self.inv_ids = {}
-
-        # mapping of node_ids to feature names based on vertex types
+        # mapping of nodes to feature names based on vertex types
         self.feature_names = {}
 
-        # a dictionary, which contains a list for each node: the ids of the neighbors
+        # a dictionary, which contains the ids of the neighbors for each node
         self.neighbors = defaultdict(list)
 
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
@@ -39,12 +33,6 @@ class TwoHopReachByType(Feature):
         :return a data frame with the columns 'name' and 'TwoHopReachByTYPE' for each existing vertex type,
             and the calculated two_hop reach for all vertices and vertex types in the given df_edges.
         """
-
-        # register nodes
-        unique_nodes = list(pd.unique(df_edges[['SRC_NAME', 'DST_NAME']].values.ravel()))
-        for node_name in unique_nodes:
-            if node_name not in self.ids:
-                self.node_count = self.register_node(node_name, self.node_count)
 
         # iterate over all edges, extract the neighbors and the vertex types
         iterator = zip(df_edges['SRC_NAME'], df_edges['SRC_TYPE'], df_edges['DST_NAME'], df_edges['DST_TYPE'])
@@ -63,7 +51,7 @@ class TwoHopReachByType(Feature):
             neighborhood = list(neighborhood)
             neighborhood.remove(v)
 
-            two_hop_neighborhood[self.inv_ids[v]] = Counter([self.feature_names[neighbor] for neighbor in neighborhood])
+            two_hop_neighborhood[v] = Counter([self.feature_names[neighbor] for neighbor in neighborhood])
 
         # create the result data frame
         result_df = pd.DataFrame(columns=['name'] + self.names)
@@ -75,8 +63,7 @@ class TwoHopReachByType(Feature):
         result_df = result_df.fillna(0)
 
         # reset all dictionaries
-        self.ids = self.inv_ids = self.types = {}
-        self.node_count = 0
+        self.feature_names = {}
         self.neighbors = defaultdict(list)
 
         return result_df
@@ -85,35 +72,14 @@ class TwoHopReachByType(Feature):
         # Not needed here, since this feature is to simple for multiprocessing
         pass
 
-    def register_node(self, node_name, node_count):
-        """
-        Records the new node by assigning an ID to it.
-        :param node_name: The new node to record.
-        :param node_count: The current amount of nodes.
-        :return: the updated amount of nodes.
-        """
-
-        self.ids[node_name] = node_count
-        self.inv_ids[node_count] = node_name
-        node_count += 1
-
-        return node_count
-
     def interpret_edge(self, s, s_type, d, d_type):
         """
-        Interprets the given edge by updating the node neighbors.
+        Interprets the given edge by updating the node neighbors and the mapping of nodes to feature_names.
         :param s: The source node (name) of the edge.
         :param s_type: The vertex type of the source node.
         :param d: The destination node (name) of the edge.
         :param d_type: The vertex type of the destination node.
         """
-
-        # map source and destination nodes to their ids
-        s, d = self.ids[s], self.ids[d]
-        # make sure that source id is smaller than destination id
-        if s > d:
-            s, d = d, s
-            s_type, d_type = d_type, s_type
 
         # update the neighbors
         self.update_neighbor(s, d)
@@ -125,12 +91,12 @@ class TwoHopReachByType(Feature):
         if d not in self.feature_names:
             self.feature_names[d] = 'TwoHopReachBy' + str(d_type)
 
-    def update_neighbor(self, node_id, neighbor_id):
+    def update_neighbor(self, node, neighbor):
         """
         Updates the neighbor of the given node.
-        :param node_id: The given node.
-        :param neighbor_id: The neighbor to update.
+        :param node: The given node.
+        :param neighbor: The neighbor to update.
         """
 
-        if neighbor_id not in self.neighbors[node_id]:
-            self.neighbors[node_id].append(neighbor_id)
+        if neighbor not in self.neighbors[node]:
+            self.neighbors[node].append(neighbor)
