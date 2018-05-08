@@ -34,9 +34,6 @@ class TestTwoHopReach(TestCase):
 
     def test_init(self):
         self.assertEqual(self.feature.names, ['TwoHopReach'])
-        self.assertEqual(self.feature.ids, {})
-        self.assertEqual(self.feature.inv_ids, {})
-        self.assertEqual(self.feature.node_count, 0)
         self.assertEqual(self.feature.neighbors, {})
 
     def test_result_df_shape(self):
@@ -67,27 +64,20 @@ class TestTwoHopReach(TestCase):
         # test the calculation of two-hop reach in the 2. time step ('df_2')
         assert_frame_equal(self.feature.process_vertices(self.df_2, 1), self.target_df_2)
 
-    def test_register_node(self):
-        self.assertEqual(self.feature.register_node("A", 3), 4)
-        self.assertEqual(self.feature.ids["A"], 3)
-        self.assertEqual(self.feature.inv_ids[3], "A")
-
     def test_interpret_edge(self):
         # add a new edge and verify the changes in neighbors-dictionary
-        self.feature.register_node("A", 0)
-        self.feature.register_node("B", 1)
         self.feature.interpret_edge("B", "A")
 
-        self.assertEqual(self.feature.neighbors[0], [1])
-        self.assertEqual(self.feature.neighbors[1], [0])
+        self.assertEqual(self.feature.neighbors["A"], ["B"])
+        self.assertEqual(self.feature.neighbors["B"], ["A"])
 
     def test_update_neighbor(self):
-        self.feature.neighbors[0] = [1, 2]
+        self.feature.neighbors["A"] = ["B", "C"]
 
         # try to add an existing neighbor
-        self.feature.update_neighbor(0, 1)
-        self.assertEqual(self.feature.neighbors[0], [1, 2])
+        self.feature.update_neighbor("A", "B")
+        self.assertEqual(self.feature.neighbors["A"], ["B", "C"])
 
         # add a new neighbor
-        self.feature.update_neighbor(0, 3)
-        self.assertEqual(self.feature.neighbors[0], [1, 2, 3])
+        self.feature.update_neighbor("A", "D")
+        self.assertEqual(self.feature.neighbors["A"], ["B", "C", "D"])
