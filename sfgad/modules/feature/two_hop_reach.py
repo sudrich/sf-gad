@@ -90,7 +90,7 @@ class TwoHopReach(Feature):
         """
         Interprets the given edge by updating the node neighbors.
         :param s: The source node (name) of the edge.
-        :param d: The distance node (name) of the edge.
+        :param d: The destination node (name) of the edge.
         """
 
         # map source and destination nodes to their ids

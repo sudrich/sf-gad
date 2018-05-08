@@ -84,7 +84,7 @@ class HotSpotInterpreter:
         """
         Interprets the given edge by updating the node neighbors and the edge frequency.
         :param s: The source node (name) of the edge.
-        :param d: The distance node (name) of the edge.
+        :param d: The destination node (name) of the edge.
         :param t: The current time stamp.
         """
 

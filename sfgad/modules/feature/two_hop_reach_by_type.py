@@ -103,7 +103,9 @@ class TwoHopReachByType(Feature):
         """
         Interprets the given edge by updating the node neighbors.
         :param s: The source node (name) of the edge.
-        :param d: The distance node (name) of the edge.
+        :param s_type: The vertex type of the source node.
+        :param d: The destination node (name) of the edge.
+        :param d_type: The vertex type of the destination node.
         """
 
         # map source and destination nodes to their ids
@@ -111,6 +113,7 @@ class TwoHopReachByType(Feature):
         # make sure that source id is smaller than destination id
         if s > d:
             s, d = d, s
+            s_type, d_type = d_type, s_type
 
         # update the neighbors
         self.update_neighbor(s, d)
