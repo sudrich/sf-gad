@@ -13,7 +13,7 @@ class TwoHopReach(Feature):
     def __init__(self):
         self.names = ['TwoHopReach']
 
-        # a dictionary, which contains the ids of the neighbors for each node
+        # a dictionary, which contains the neighbors for each node
         self.neighbors = defaultdict(list)
 
     def process_vertices(self, df_edges, n_jobs, update_activity=True):

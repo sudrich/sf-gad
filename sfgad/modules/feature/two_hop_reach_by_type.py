@@ -20,7 +20,7 @@ class TwoHopReachByType(Feature):
         # mapping of nodes to feature names based on vertex types
         self.feature_names = {}
 
-        # a dictionary, which contains the ids of the neighbors for each node
+        # a dictionary, which contains the neighbors for each node
         self.neighbors = defaultdict(list)
 
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
