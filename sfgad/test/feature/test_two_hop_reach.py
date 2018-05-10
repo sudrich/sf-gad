@@ -36,6 +36,13 @@ class TestTwoHopReach(TestCase):
         self.assertEqual(self.feature.names, ['TwoHopReach'])
         self.assertEqual(self.feature.neighbors, {})
 
+    def test_reset_after_processing(self):
+        # process a time step
+        self.feature.process_vertices(self.df_1, 1)
+
+        # test resetting of the dictionaries
+        self.assertEqual(self.feature.neighbors, {})
+
     def test_result_df_shape(self):
         result_df_1 = self.feature.process_vertices(self.df_1, 1)
 

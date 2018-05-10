@@ -117,7 +117,6 @@ class TestHotSpotInterpreter(unittest.TestCase):
         self.assertEqual(self.interpreter.neighbors, interpreter_copy.neighbors)
         self.assertEqual(self.interpreter.fit_buffer[-1], interpreter_copy.fit_buffer[-1])
 
-
     def test_get_freq(self):
         # edge (0, 1) is unknown
         self.assertRaises(ValueError, self.interpreter.get_freq, (0, 1))
