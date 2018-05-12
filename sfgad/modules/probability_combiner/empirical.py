@@ -37,13 +37,8 @@ class Empirical(ProbabilityCombiner):
         # assert ref_p_values is a ndarray
         assert type(ref_p_values) == np.ndarray
 
-        # check that the reference p_values of each reference observation ...
+        # check that the reference p_values of each reference observation are all floats (or integers)
         for ref in ref_p_values:
-            # ... have the same length as p_values
-            if len(ref) != l:
-                raise ValueError('The p_values list of each reference observation should have the same length as given '
-                                 'p_values list')
-            # ... are all floats (or integers)
             if not all(isinstance(x, (int, float)) for x in ref):
                 raise ValueError('The p_values of each reference observation should all be of the type \'float\'')
 
