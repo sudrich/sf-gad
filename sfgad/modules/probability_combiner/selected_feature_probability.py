@@ -9,10 +9,11 @@ class SelectedFeatureProbability(ProbabilityCombiner):
         """
         self.feature_position = feature_position
 
-    def combine(self, p_values):
+    def combine(self, p_values, ref_p_values=None):
         """
         Takes a list of p_values and combines them into a single p_value by choosing the p_value of the first feature.
         :param p_values: a list of p_values of features.
+        :param ref_p_values: p-values of reference observations (if needed).
         :return: The combined p-value.
         """
 
