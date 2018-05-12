@@ -10,7 +10,7 @@ class TestAvgProbability(TestCase):
     def test_combine_output(self):
         p_values = [0.21, 0.12, 0.021, 0.15, 0.067]
 
-        # test the right output for position 2
+        # test the right output
         self.assertAlmostEqual(self.combiner.combine(p_values), 0.1136, delta=0.0001)
 
     def test_combine_empty_list(self):

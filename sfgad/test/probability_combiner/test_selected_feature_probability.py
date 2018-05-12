@@ -10,7 +10,7 @@ class TestSelectedFeatureProbability(TestCase):
     def test_combine_output(self):
         p_values = [0.21, 0.12, 0.021, 0.15, 0.067]
 
-        # test the right output for position 2
+        # test the right output
         self.assertEqual(self.combiner.combine(p_values), p_values[2])
 
     def test_combine_empty_list(self):
