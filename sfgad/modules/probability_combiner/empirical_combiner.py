@@ -3,9 +3,13 @@ import numpy as np
 from .probability_combiner import ProbabilityCombiner
 
 
-class Empirical(ProbabilityCombiner):
+class EmpiricalCombiner(ProbabilityCombiner):
 
-    def __init__(self, direction='left'):
+    def __init__(self, direction='left-tailed'):
+
+        if direction not in ['right-tailed', 'left-tailed']:
+            raise ValueError("The given direction for empirical probability calculation is not known! "
+                             "Possible directions are: 'right-tailed' & 'left-tailed'.")
 
         self.direction = direction
 
@@ -61,9 +65,9 @@ class Empirical(ProbabilityCombiner):
         """
         isnan = np.isnan(references)
 
-        if direction == 'right':
+        if direction == 'right-tailed':
             conditions = references[~isnan] >= value
-        elif direction == 'left':
+        elif direction == 'left-tailed':
             conditions = references[~isnan] <= value
         else:
             raise ValueError("The given direction for empirical calculation is not known.")
@@ -75,11 +79,3 @@ class Empirical(ProbabilityCombiner):
             return np.nan
 
         return sum_conditional_weights / sum_all_weights
-
-    def set_direction(self, direction):
-        """
-        Sets a direction for the empirical calculation.
-        :param direction: the direction for the empirical calculation.
-        """
-
-        self.direction = direction

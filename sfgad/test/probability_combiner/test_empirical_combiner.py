@@ -1,13 +1,13 @@
 import numpy as np
 
 from unittest import TestCase
-from sfgad.modules.probability_combiner.empirical import Empirical
+from sfgad.modules.probability_combiner.empirical_combiner import EmpiricalCombiner
 
 
-class TestEmpirical(TestCase):
+class TestEmpiricalCombiner(TestCase):
 
     def setUp(self):
-        self.combiner = Empirical()
+        self.combiner = EmpiricalCombiner()
 
     def test_combine_output(self):
         p_values = [0.21, 0.12, 0.021, 0.15, 0.067]
@@ -55,19 +55,14 @@ class TestEmpirical(TestCase):
         self.assertRaises(ValueError, self.combiner.combine, p_values, ref_p_values)
 
     def test_direction_change(self):
+        self.combiner = EmpiricalCombiner(direction='right-tailed')
+
         p_values = [0.21, 0.12, 0.021, 0.15, 0.067]
         ref_p_values = np.array([[0.21, 0.12, 0.1, 0.15, 0.067], [0.21, 0.12, 0.21, 0.15, 0.067]], dtype=float)
-
-        self.combiner.set_direction('right')
 
         # test the right output
         self.assertEqual(self.combiner.combine(p_values, ref_p_values), 1)
 
     def test_wrong_direction(self):
-        p_values = [0.21, 0.12, 0.021, 0.15, 0.067]
-        ref_p_values = np.array([[0.21, 0.12, 0.1, 0.15, 0.067], [0.21, 0.12, 0.21, 0.15, 0.067]], dtype=float)
-
-        self.combiner.set_direction('up')
-
-        # expect an assertion error
-        self.assertRaises(ValueError, self.combiner.combine, p_values, ref_p_values)
+        # expect a value error
+        self.assertRaises(ValueError, EmpiricalCombiner, direction='up')
