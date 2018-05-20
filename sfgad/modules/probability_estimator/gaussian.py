@@ -42,17 +42,17 @@ class Gaussian(ProbabilityEstimator):
             # This is the feature value for the current feature of the vertex in question
             feature_value = features_values.iloc[0][feature_name]
 
-            mean, std = self.weighted_mean_and_std(df[feature_name], df['weight'])
+            mean, sd = self.weighted_mean_and_sd(df[feature_name], df['weight'])
 
             if self.direction == 'right-tailed':
-                p_value = 1 - st.norm.cdf(feature_value, mean, std)
+                p_value = 1 - st.norm.cdf(feature_value, mean, sd)
 
             elif self.direction == 'left-tailed':
-                p_value = st.norm.cdf(feature_value, mean, std)
+                p_value = st.norm.cdf(feature_value, mean, sd)
 
             else:
-                p_value_right = 1 - st.norm.cdf(feature_value, mean, std)
-                p_value_left = st.norm.cdf(feature_value, mean, std)
+                p_value_right = 1 - st.norm.cdf(feature_value, mean, sd)
+                p_value_left = st.norm.cdf(feature_value, mean, sd)
 
                 p_value = 2 * min(p_value_right, p_value_left)
 
@@ -62,7 +62,7 @@ class Gaussian(ProbabilityEstimator):
         # Return the completed list
         return p_values_list
 
-    def weighted_mean_and_std(self, values, weights):
+    def weighted_mean_and_sd(self, values, weights):
         """
         Returns the weighted mean and standard deviation of the given values weighted by the given weights.
         :param values: the given feature values.
