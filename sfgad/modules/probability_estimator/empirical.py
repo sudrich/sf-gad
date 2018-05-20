@@ -6,15 +6,13 @@ from .probability_estimator import ProbabilityEstimator
 
 class Empirical(ProbabilityEstimator):
 
-    def __init__(self, direction='right', mode="one-tailed"):
-        self.direction = direction
+    def __init__(self, direction='right-tailed'):
 
-        if mode == "one-tailed":
-            self.mode = 1
-        elif mode == "two-tailed":
-            self.mode = 2
-        else:
-            raise ValueError("The supplied mode of operation for empirical calculation is not known.")
+        if direction not in ['right-tailed', 'left-tailed', 'two-tailed']:
+            raise ValueError("The given direction for probability calculation is not known! "
+                             "Possible directions are: 'right-tailed', 'left-tailed' & 'two-tailed'.")
+
+        self.direction = direction
 
     def estimate(self, vertex_name, features_values, reference_features_values, weights):
         """
@@ -42,13 +40,14 @@ class Empirical(ProbabilityEstimator):
             # This is the feature value for the current feature of the vertex in question
             feature_value = features_values.iloc[0][feature_name]
 
-            if self.mode == 1:
-                p_value = self.empirical(feature_value, df[feature_name], df['weight'], self.direction)
-            else:
+            if self.direction == 'two-tailed':
                 p_value_right = self.empirical(feature_value, df[feature_name], df['weight'], 'right')
                 p_value_left = self.empirical(feature_value, df[feature_name], df['weight'], 'left')
 
                 p_value = 2 * min(p_value_right, p_value_left)
+
+            else:
+                p_value = self.empirical(feature_value, df[feature_name], df['weight'], self.direction)
 
             # Add the calculated p_value to the list of p_values for this vertex
             p_values_list.append(p_value)
@@ -67,9 +66,9 @@ class Empirical(ProbabilityEstimator):
         """
         isnan = np.isnan(references)
 
-        if direction == 'right':
+        if direction == 'right-tailed':
             conditions = references[~isnan] >= value
-        elif direction == 'left':
+        elif direction == 'left-tailed':
             conditions = references[~isnan] <= value
         else:
             raise ValueError("The given direction for empirical calculation is not known.")
