@@ -16,13 +16,23 @@ class Empirical(ProbabilityEstimator):
         else:
             raise ValueError("The supplied mode of operation for empirical calculation is not known.")
 
-    def estimate(self, vertex_name, features, reference_feature_values, weights):
+    def estimate(self, vertex_name, features_values, reference_features_values, weights):
+        """
+        Takes a vertex and a reference to the database.
+        Returns a list of p_values with a p_value for each given feature value in features_df. These p_values are
+        calculated based on the given reference_feature_values.
+        :param vertex_name: the name of the vertex.
+        :param features_values: Dataframe with values of features.
+        :param reference_features_values: List of tuples of windows and the corresponding feature values.
+        :param weights: the weights for the different windows.
+        :return: List of p_values.
+        """
 
         # Add the weights to a combined dataframe of reference_values and weights
-        df = pd.merge(reference_feature_values, weights, on="time_window")
+        df = pd.merge(reference_features_values, weights, on="time_window")
 
         # Get a list of all the features for building an easy iterable
-        features_list = features.columns.values.tolist()
+        features_list = features_values.columns.values.tolist()
         features_list.remove('name')
 
         p_values_list = []
@@ -30,7 +40,7 @@ class Empirical(ProbabilityEstimator):
         for feature_name in features_list:
 
             # This is the feature value for the current feature of the vertex in question
-            feature_value = features.iloc[0][feature_name]
+            feature_value = features_values.iloc[0][feature_name]
 
             if self.mode == 1:
                 p_value = self.empirical(feature_value, df[feature_name], df['weight'], self.direction)
@@ -63,7 +73,6 @@ class Empirical(ProbabilityEstimator):
             conditions = references[~isnan] <= value
         else:
             raise ValueError("The given direction for empirical calculation is not known.")
-
 
         sum_all_weights = weights[~isnan].sum()
         sum_conditional_weights = (conditions * weights[~isnan]).sum()
