@@ -62,3 +62,12 @@ class TestEmpirical(TestCase):
 
         # test the right output
         self.assertEqual(self.combiner.combine(p_values, ref_p_values), 1)
+
+    def test_wrong_direction(self):
+        p_values = [0.21, 0.12, 0.021, 0.15, 0.067]
+        ref_p_values = np.array([[0.21, 0.12, 0.1, 0.15, 0.067], [0.21, 0.12, 0.21, 0.15, 0.067]], dtype=float)
+
+        self.combiner.set_direction('up')
+
+        # expect an assertion error
+        self.assertRaises(ValueError, self.combiner.combine, p_values, ref_p_values)

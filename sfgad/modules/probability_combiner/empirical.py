@@ -50,7 +50,7 @@ class Empirical(ProbabilityCombiner):
         return self.empirical(min_p_value, min_ref_p_values, weights=np.ones(len(min_ref_p_values)),
                               direction=self.direction)
 
-    def empirical(self, value, references, weights, direction='right'):
+    def empirical(self, value, references, weights, direction):
         """
         Execute the empirical p-value combination.
         :param value: the given minimal p-value
@@ -63,8 +63,10 @@ class Empirical(ProbabilityCombiner):
 
         if direction == 'right':
             conditions = references[~isnan] >= value
-        else:
+        elif direction == 'left':
             conditions = references[~isnan] <= value
+        else:
+            raise ValueError("The given direction for empirical calculation is not known.")
 
         sum_all_weights = weights[~isnan].sum()
         sum_conditional_weights = (conditions * weights[~isnan]).sum()
