@@ -4,9 +4,9 @@ import numpy as np
 from .probability_estimator import ProbabilityEstimator
 
 
-class Empirical(ProbabilityEstimator):
+class EmpiricalEstimator(ProbabilityEstimator):
 
-    def __init__(self, direction='right-tailed'):
+    def __init__(self, direction='left-tailed'):
 
         if direction not in ['right-tailed', 'left-tailed', 'two-tailed']:
             raise ValueError("The given direction for probability calculation is not known! "
@@ -14,24 +14,25 @@ class Empirical(ProbabilityEstimator):
 
         self.direction = direction
 
-    def estimate(self, vertex_name, features_values, reference_features_values, weights):
+    def estimate(self, features_values, reference_features_values, weights):
         """
         Takes a vertex and a reference to the database.
         Returns a list of p_values with a p_value for each given feature value in features_values. These p_values are
         calculated based on the given reference_features_values.
-        :param vertex_name: the name of the vertex.
-        :param features_values: Dataframe with values of features.
-        :param reference_features_values: List of tuples of windows and the corresponding feature values.
-        :param weights: the weights for the different windows.
+        :param features_values: (1 x n) dataframe with a value for each feature. Each column refers to a feature, so n
+        is the number of features (no 'name'-column).
+        :param reference_features_values: (m x n+1) dataframe of tuples of windows and the corresponding feature values.
+        :param weights: (m x 2) dataframe with weights for the different windows.
         :return: List of p_values.
         """
+
+        #TODO: test that feature_values is a dataframe with 1 row and >= 2 cols
 
         # Add the weights to a combined dataframe of reference_values and weights
         df = pd.merge(reference_features_values, weights, on="time_window")
 
         # Get a list of all the features for building an easy iterable
         features_list = features_values.columns.values.tolist()
-        features_list.remove('name')
 
         p_values_list = []
 
@@ -41,8 +42,8 @@ class Empirical(ProbabilityEstimator):
             feature_value = features_values.iloc[0][feature_name]
 
             if self.direction == 'two-tailed':
-                p_value_right = self.empirical(feature_value, df[feature_name], df['weight'], 'right')
-                p_value_left = self.empirical(feature_value, df[feature_name], df['weight'], 'left')
+                p_value_right = self.empirical(feature_value, df[feature_name], df['weight'], 'right-tailed')
+                p_value_left = self.empirical(feature_value, df[feature_name], df['weight'], 'left-tailed')
 
                 p_value = 2 * min(p_value_right, p_value_left)
 
