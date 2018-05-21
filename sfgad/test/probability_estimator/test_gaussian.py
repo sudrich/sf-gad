@@ -2,16 +2,16 @@ import numpy as np
 import pandas as pd
 
 from unittest import TestCase
-from sfgad.modules.probability_estimator.empirical_estimator import EmpiricalEstimator
+from sfgad.modules.probability_estimator.gaussian import Gaussian
 
 
-class TestEmpiricalEstimator(TestCase):
+class TestGaussian(TestCase):
 
     def setUp(self):
-        self.estimator = EmpiricalEstimator()
+        self.estimator = Gaussian()
 
         self.features_values = pd.DataFrame(
-            data={'Feature_A': [42], 'Feature_B': [0]},
+            data={'Feature_A': [42], 'Feature_B': [1]},
             columns=['Feature_A', 'Feature_B'])
 
         self.reference_features_values = pd.DataFrame(
@@ -25,26 +25,29 @@ class TestEmpiricalEstimator(TestCase):
     def test_estimator_output(self):
 
         # test the right output with direction='left-tailed'
-        self.assertEqual(
-            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.6, 0.4])
+        np.testing.assert_almost_equal(
+            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights),
+            [0.5373, 0.6054], 4)
 
     def test_direction_right(self):
-        self.estimator = EmpiricalEstimator(direction='right-tailed')
+        self.estimator = Gaussian(direction='right-tailed')
 
         # test the right output with direction='right-tailed'
-        self.assertEqual(
-            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.6, 1.0])
+        np.testing.assert_almost_equal(
+            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights),
+            [0.4627, 0.3946], 4)
 
     def test_direction_two_tailed(self):
-        self.estimator = EmpiricalEstimator(direction='two-tailed')
+        self.estimator = Gaussian(direction='two-tailed')
 
         # test the right output with direction='two-tailed'
-        self.assertEqual(
-            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [1.2, 0.8])
+        np.testing.assert_almost_equal(
+            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights),
+            [0.9254, 0.7893], 4)
 
     def test_wrong_direction(self):
         # expect a value error
-        self.assertRaises(ValueError, EmpiricalEstimator, direction='up')
+        self.assertRaises(ValueError, Gaussian, direction='up')
 
     def test_wrong_input_no_dataframe(self):
         # parameter is not a dataframe
@@ -199,10 +202,3 @@ class TestEmpiricalEstimator(TestCase):
         # expect a value error
         self.assertRaises(ValueError, self.estimator.estimate, self.features_values, self.reference_features_values,
                           weights)
-
-
-
-
-
-
-

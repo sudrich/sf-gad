@@ -2,20 +2,20 @@ import numpy as np
 import pandas as pd
 
 from unittest import TestCase
-from sfgad.modules.probability_estimator.empirical_estimator import EmpiricalEstimator
+from sfgad.modules.probability_estimator.uniform import Uniform
 
 
-class TestEmpiricalEstimator(TestCase):
+class TestUniform(TestCase):
 
     def setUp(self):
-        self.estimator = EmpiricalEstimator()
+        self.estimator = Uniform()
 
         self.features_values = pd.DataFrame(
-            data={'Feature_A': [42], 'Feature_B': [0]},
+            data={'Feature_A': [42], 'Feature_B': [1]},
             columns=['Feature_A', 'Feature_B'])
 
         self.reference_features_values = pd.DataFrame(
-            data={'Feature_A': [40, 45, 42, 39, 43], 'Feature_B': [0, 1, 0, 1, 2], 'time_window': [0, 1, 2, 3, 4]},
+            data={'Feature_A': [40, 43, 42, 39, 43], 'Feature_B': [0, 1, 0, 1, 2], 'time_window': [0, 1, 2, 3, 4]},
             columns=['Feature_A', 'Feature_B', 'time_window'])
 
         self.weights = pd.DataFrame(
@@ -26,25 +26,25 @@ class TestEmpiricalEstimator(TestCase):
 
         # test the right output with direction='left-tailed'
         self.assertEqual(
-            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.6, 0.4])
+            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.75, 0.5])
 
     def test_direction_right(self):
-        self.estimator = EmpiricalEstimator(direction='right-tailed')
+        self.estimator = Uniform(direction='right-tailed')
 
         # test the right output with direction='right-tailed'
         self.assertEqual(
-            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.6, 1.0])
+            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.25, 0.5])
 
     def test_direction_two_tailed(self):
-        self.estimator = EmpiricalEstimator(direction='two-tailed')
+        self.estimator = Uniform(direction='two-tailed')
 
         # test the right output with direction='two-tailed'
         self.assertEqual(
-            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [1.2, 0.8])
+            self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [0.5, 1.0])
 
     def test_wrong_direction(self):
         # expect a value error
-        self.assertRaises(ValueError, EmpiricalEstimator, direction='up')
+        self.assertRaises(ValueError, Uniform, direction='up')
 
     def test_wrong_input_no_dataframe(self):
         # parameter is not a dataframe
@@ -199,10 +199,3 @@ class TestEmpiricalEstimator(TestCase):
         # expect a value error
         self.assertRaises(ValueError, self.estimator.estimate, self.features_values, self.reference_features_values,
                           weights)
-
-
-
-
-
-
-
