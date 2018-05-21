@@ -1,7 +1,7 @@
 import abc
 
 
-class ObservationGatherer:
+class ObservationSelection:
 
     @abc.abstractmethod
     def gather(self, vertex_name, database):
