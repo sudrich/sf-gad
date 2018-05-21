@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import scipy.stats as st
 
 from .probability_estimator import ProbabilityEstimator
@@ -6,7 +7,7 @@ from .probability_estimator import ProbabilityEstimator
 
 class Uniform(ProbabilityEstimator):
 
-    def __init__(self, direction='right-tailed'):
+    def __init__(self, direction='left-tailed'):
 
         if direction not in ['right-tailed', 'left-tailed', 'two-tailed']:
             raise ValueError("The given direction for probability calculation is not known! "
@@ -101,7 +102,6 @@ class Uniform(ProbabilityEstimator):
 
         # Get a list of all the features for building an easy iterable
         features_list = features_values.columns.values.tolist()
-        features_list.remove('name')
 
         p_values_list = []
 

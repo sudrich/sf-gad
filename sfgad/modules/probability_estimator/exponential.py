@@ -8,7 +8,7 @@ from .probability_estimator import ProbabilityEstimator
 
 class Exponential(ProbabilityEstimator):
 
-    def __init__(self, direction='right-tailed'):
+    def __init__(self, direction='left-tailed'):
 
         if direction not in ['right-tailed', 'left-tailed', 'two-tailed']:
             raise ValueError("The given direction for probability calculation is not known! "
@@ -103,7 +103,6 @@ class Exponential(ProbabilityEstimator):
 
         # Get a list of all the features for building an easy iterable
         features_list = features_values.columns.values.tolist()
-        features_list.remove('name')
 
         p_values_list = []
 
