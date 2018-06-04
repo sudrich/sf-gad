@@ -5,8 +5,8 @@ from .feature import Feature
 
 class VertexActivityByType(Feature):
     """
-    The feature VertexActivityByType of a single vertex is defined as a binary indicator, which is 1 if the vertex has at
-    least 1 incident edge of a specific edge type, and 0 otherwise.
+    The feature VertexActivityByType of a single vertex is defined as a binary indicator, which is 1 if the vertex has
+    at least 1 incident edge of a specific edge type, and 0 otherwise.
 
     All edge types should appear in the result data frame as columns, even if there are no occurrences of this edge type
     in the current time step.
