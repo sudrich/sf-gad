@@ -133,16 +133,6 @@ class TestHotSpotInterpreter(unittest.TestCase):
         self.interpreter.register_node("A", 0)
         self.assertEqual(self.interpreter.get_node_id("A"), 0)
 
-    def test_get_neighbor_id(self):
-        self.interpreter.neighbors[1].append(2)
-
-        # node 1 has no neighbor at index 1
-        self.assertRaises(ValueError, self.interpreter.get_neighbor_id, 1, 1)
-
-        # now node 1 has a neighbor at index 1
-        self.interpreter.neighbors[1].append(3)
-        self.assertEqual(self.interpreter.get_neighbor_id(1, 1), 3)
-
     def test_get_current_time(self):
         # interpreter is empty
         self.assertEqual(self.interpreter.get_current_time(), pd.Timestamp.min)

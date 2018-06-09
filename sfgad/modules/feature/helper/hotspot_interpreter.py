@@ -41,7 +41,7 @@ class HotSpotInterpreter:
         Interprets the given edge_frame by: registering new nodes; updating the node neighbors; updating the edge
         frequencies; and updating the fit buffer.
         :param df_edges: The edge_frame to interpret.
-        :return: the unique node names in df_edges, and the current time stamp
+        :return: the current time stamp, and the unique node names in df_edges
         """
 
         current_time, n_nodes, _, _ = self.fit_buffer[-1]
@@ -210,18 +210,6 @@ class HotSpotInterpreter:
 
         return self.ids[node_name]
 
-    def get_neighbor_id(self, node_id, neighbor_idx):
-        """
-        Returns the id of the neighbor at the given index.
-        :param node_id: The given node.
-        :param neighbor_idx: The index of the neighbor.
-        :return: The id of the neighbor.
-        """
-        if neighbor_idx >= len(self.neighbors[node_id]):
-            raise ValueError("Error! The given neighbor index is invalid!")
-
-        return self.neighbors[node_id][neighbor_idx]
-
     def get_current_time(self):
         """
         Returns the current time of the interpreter.
@@ -257,31 +245,3 @@ class HotSpotInterpreter:
             raise ValueError("Error! The given node_id is unknown!")
 
         return self.neighbors[node_id]
-
-
-    #def del_neighbor(self, node_id, neighbor_id):
-    #    neighbor_index = self.get_neighbor_idx(node_id, neighbor_id)
-
-    #    if not np.isnan(neighbor_index):
-    #        del self.neighbors[node_id][neighbor_index]
-    #        del self.neighbors_time[node_id][neighbor_index]
-
-    #def get_neighbor_idx(self, node_id, neighbor_id):
-
-    #    neighbor_index = np.nan
-
-    #    if len(self.neighbors[node_id]) > 0:
-    #        neighbors = self.neighbors[node_id]
-
-    #        if neighbor_id in neighbors:
-    #            neighbor_index = neighbors.index(neighbor_id)
-
-    #    return neighbor_index
-
-    #def get_node_name(self, node_id):
-
-        # Exception, if node_id is unknown
-    #    if node_id not in self.inv_ids:
-    #        raise ValueError("Error! The given node_id is unknown!")
-
-    #    return self.inv_ids[node_id]
