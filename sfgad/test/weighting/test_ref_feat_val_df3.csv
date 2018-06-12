@@ -1,5 +1,0 @@
-name,type,age,time_window,time,VertexDegreeDifference
-mark.taylor@enron.com,USER,4.0,0,1999-01-04,6.0
-mark.taylor@enron.com,USER,4.0,1,1999-01-05,-2.0
-mark.taylor@enron.com,USER,4.0,2,1999-01-06,-2.0
-mark.taylor@enron.com,USER,4.0,3,1999-01-07,8.0
