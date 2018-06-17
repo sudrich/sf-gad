@@ -89,3 +89,25 @@ class TestExternalFeature(TestCase):
         )
 
         assert_frame_equal(feature.process_vertices(self.df, 1), target_df)
+
+    def test_dict_wrong_scheme_1(self):
+
+        # nor all keys are Strings
+        values_dict = {
+            'A': [(pd.to_datetime('2018-01-01 00:00:01'), -1), (pd.to_datetime('2018-01-01 00:00:11'), 42)],
+            42: [(pd.to_datetime('2018-01-01 00:00:12'), 24)],
+            'C': [(pd.to_datetime('2018-01-01 00:00:11'), 0), (pd.to_datetime('2018-01-01 00:00:12'), -1)]
+        }
+
+        self.assertRaises(ValueError, ExternalFeature, values_dict)
+
+    def test_dict_wrong_scheme_2(self):
+
+        # nor all keys are Strings
+        values_dict = {
+            'A': [(pd.to_datetime('2018-01-01 00:00:01'), -1), (pd.to_datetime('2018-01-01 00:00:11'), 42)],
+            'B': [(pd.to_datetime('2018-01-01 00:00:12'), 24)],
+            'C': 42
+        }
+
+        self.assertRaises(ValueError, ExternalFeature, values_dict)

@@ -15,7 +15,15 @@ class ExternalFeature(Feature):
     def __init__(self, values_dict):
         self.names = ['ExternalFeature']
 
-        # node -> list of tuples (time, value) sorted by time
+        # the values dictionary should map nodes to -> list of tuples (time, value) sorted by time
+        # check the scheme of the given dictionary first:
+        #  all keys should be strings, ...
+        if not all(isinstance(k, str) for k in values_dict.keys()):
+            raise ValueError("Error! Not all keys are strings in the given dictionary!")
+        # ... all values should be lists
+        if not all(isinstance(v, list) for v in values_dict.values()):
+            raise ValueError("Error! Not all values are lists in the given dictionary!")
+
         self.values_dict = values_dict
 
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
