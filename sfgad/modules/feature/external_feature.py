@@ -48,13 +48,13 @@ class ExternalFeature(Feature):
                     _, latest_value = node_values[0]
                     external_values.append(latest_value)
                 else:
-                    # append NAN if there are no more measured values at the current time
+                    # append NaN if there are no more measured values at the current time
                     external_values.append(np.nan)
 
                 # update the dictionary
                 self.values_dict[node] = node_values
             else:
-                # append NAN if the node is not known
+                # append NaN if the node is not known
                 external_values.append(np.nan)
 
         # create the result dataframe
