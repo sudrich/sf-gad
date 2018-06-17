@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import datetime
 
 from .feature import Feature
 from itertools import dropwhile
@@ -17,12 +18,28 @@ class ExternalFeature(Feature):
 
         # the values dictionary should map nodes to -> list of tuples (time, value) sorted by time
         # check the scheme of the given dictionary first:
+        if not isinstance(values_dict, dict):
+            raise ValueError("Error! The given argument 'values_dict' should be a dictionary with node names as keys "
+                             "and lists of measured data (time, value) as values!")
         #  all keys should be strings, ...
         if not all(isinstance(k, str) for k in values_dict.keys()):
             raise ValueError("Error! Not all keys are strings in the given dictionary!")
         # ... all values should be lists
         if not all(isinstance(v, list) for v in values_dict.values()):
             raise ValueError("Error! Not all values are lists in the given dictionary!")
+        # ..., and all list elements should be tuples of the kind (time, value)
+        for k in values_dict:
+            if not all(isinstance(e, tuple) for e in values_dict[k]):
+                raise ValueError("Error! Not all list elements of the nodes are tuples in the given dictionary!")
+            list_data = list(zip(*values_dict[k]))
+            # check the type of the timestamps
+            if not all(isinstance(d, datetime.datetime) for d in list_data[0]):
+                raise ValueError("Error! The list elements of the nodes in the given dictionary should be tuples of "
+                                 "the kind (datetime, value)!")
+            # no check for the value, because the type is domain specific
+            if not self.is_sorted(list_data[0]):
+                raise ValueError("Error! The list elements of the nodes in the given dictionary should be sorted by "
+                                 "time!")
 
         self.values_dict = values_dict
 
@@ -74,3 +91,18 @@ class ExternalFeature(Feature):
     def compute(self, node_name, t):
         # Not needed here, since this feature is to simple for multiprocessing
         pass
+
+    def is_sorted(self, lst, key=lambda x: x):
+        """
+        A helper function which checks whether the given list is sorted, or not.
+        :param lst: The given list to check.
+        :param key: key by which the list should be sorted.
+        :return True, if the list is sorted, false otherwise.
+        """
+
+        for i, el in enumerate(lst[1:]):
+            # i is the index of the previous element
+            if key(el) < key(lst[i]):
+                return False
+
+        return True
