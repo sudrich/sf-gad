@@ -1,3 +1,3 @@
-![SFGAD](https://raw.githubusercontent.com/sudrich/master/doc/img/logo.svg)
+![SFGAD](./doc/img/logo.png)
 
 A statistical framework for graph anomaly detection.
