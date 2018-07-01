@@ -11,4 +11,4 @@ I provides:
 * A customizable detection framework with **6** components
 * Several pre-defined **configurations**
 
-<img src="../doc/img/sfgad.png" alt="Process"/>
+![Process](./doc/img/sfgad.png)
