@@ -55,4 +55,6 @@ For testing use pytest from the source directory:
 pytest sfgad
 ```
 
+## Acknowledgements
 
+This work originated from the QuestMiner project (grant no. 01IS12051) and was partially funded by the German Federal Ministry of Education and Research (BMBF).
