@@ -1,9 +1,9 @@
 from .observation_selection import ObservationSelection
 
 
-class HistoricSameSelection(ObservationSelection):
+class HistoricAllSelection(ObservationSelection):
     """
-    This observation selection gathers all historic observations of the requested vertex.
+    This observation selection gathers all historic observations of all vertices.
     The results can be limited by providing a limit parameter.
     """
 
@@ -24,4 +24,4 @@ class HistoricSameSelection(ObservationSelection):
         :param database: The reference to the Database
         :return: Dataframe of the relevant entries in the database
         """
-        return database.select_by_vertex_name(vertex_name).head(self.limit)
+        return database.select_all().head(self.limit)

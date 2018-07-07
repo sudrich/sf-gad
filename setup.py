@@ -14,7 +14,7 @@ VERSION = sfgad.__version__
 
 SCIPY_MIN_VERSION = '0.13.3'
 NUMPY_MIN_VERSION = '1.8.2'
-PNADAS_MIN_VERSION = '0.22.0'
+PANDAS_MIN_VERSION = '0.22.0'
 
 
 def setup_package():
@@ -27,15 +27,15 @@ def setup_package():
                     download_url=DOWNLOAD_URL,
                     version=VERSION,
                     classifiers=[],
-                    cmdclass=cmdclass,
                     install_requires=[
                         'numpy>={0}'.format(NUMPY_MIN_VERSION),
                         'pandas>={0}'.format(PANDAS_MIN_VERSION),
                         'scipy>={0}'.format(SCIPY_MIN_VERSION)
-						]
-					)
+                    ],
+                    )
 
-	setup(**metadata)
+    setup(**metadata)
+
 
 if __name__ == "__main__":
-	setup_package()
+    setup_package()

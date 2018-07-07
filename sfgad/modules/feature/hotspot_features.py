@@ -101,6 +101,12 @@ class HotSpotFeatures(Feature):
             if not df_edges.empty:
                 self.interpreter.turn_back_time()
 
+                # delete all new keys in node_age
+                _, n_nodes, _, _ = self.interpreter.fit_buffer[-1]
+                for k in list(self.node_age.keys()):
+                    if k >= n_nodes:
+                        self.node_age.pop(k)
+
         rel_results = []
         for node_result in results:
             #     if np.isnan(node_result[4]):
@@ -254,11 +260,9 @@ class HotSpotFeatures(Feature):
         if self.node_age[node_id] > 0:
             cor_old, mag_old = self.activity_buffer[node_id][0]
 
-            # the correlation vectors should have the same length
-            if len(cor) > len(cor_old):
-                cor_old += [0] * (len(cor) - len(cor_old))
+            # the correlation vectors should have the same length, so the vector is scaled-up if necessary
+            cor_change = 1 - abs(np.dot(cor_old + [0] * (len(cor) - len(cor_old)), cor))
 
-            cor_change = 1 - abs(np.dot(cor_old, cor))
             mag_change = mag_old - mag
 
         return cor_change, mag_change

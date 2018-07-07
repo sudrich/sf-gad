@@ -75,10 +75,10 @@ class TestIncidentTriangles(TestCase):
         assert_series_equal(result_df_1['IncidentTriangles'], self.target_df_1['IncidentTriangles'])
 
     def test_overall_processing_all_nodes(self):
-        # test the calculation of two-hop reach in the 1. time step ('df_1')
+        # test the calculation of incident triangles in the 1. time step ('df_1')
         assert_frame_equal(self.feature.process_vertices(self.df_1, 1), self.target_df_1)
 
-        # test the calculation of two-hop reach in the 2. time step ('df_2')
+        # test the calculation of incident triangles in the 2. time step ('df_2')
         assert_frame_equal(self.feature.process_vertices(self.df_2, 1), self.target_df_2)
 
     def test_interpret_edge(self):
