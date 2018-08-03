@@ -1,0 +1,5 @@
+from .constant_weight import ConstantWeight
+from .exponential_decay_weight import ExponentialDecayWeight
+from .linear_decay_weight import LinearDecayWeight
+# from .similarity_based_weight import SimilarityBasedWeight
+from .type_specific_weight import TypeSpecificWeight
