@@ -31,7 +31,7 @@ def benchmark_dynamic_features(n_vertices, n_edges, n_vertex_types, n_timesteps,
     dfs = []
     for i in range(n_timesteps):
         g = generate_graph(n_vertices, n_edges, n_vertex_types)
-        dfs.append(from_nx(g, time=i))
+        dfs.append(from_nx(g, timestep=i))
 
     # vertex_types = list(dfs[0][['SRC_TYPE', 'DST_TYPE']].unstack().unique())
     edge_types = list(dfs[0].E_TYPE.unique())
