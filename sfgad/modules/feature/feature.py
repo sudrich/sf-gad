@@ -24,3 +24,10 @@ class Feature(metaclass=abc.ABCMeta):
         :param t: The time point at which the new feature value should be computed.
         :return: the new feature value.
         """
+
+    @abc.abstractmethod
+    def reset(self):
+        """
+        Resets the feature to its initial state.
+        This is especially relevant for dynamic features that preserve an internal state.
+        """

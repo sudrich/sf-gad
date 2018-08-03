@@ -37,6 +37,18 @@ class HotSpotFeatures(Feature):
 
         self.prev_timestamps = deque(maxlen=self.half_life)
 
+    def reset(self):
+        self.interpreter = HotSpotInterpreter(self.decay_lambda, self.half_life)
+
+        # the age of the nodes
+        self.node_age = defaultdict(int)
+        # the product matrices of the last time step (t; product_matrix)
+        self.prev_product_matrices = {}
+        # contains for each node a deque of tuples of the form: (correlation; magnitude)
+        self.activity_buffer = defaultdict(partial(deque, maxlen=self.half_life))
+
+        self.prev_timestamps = deque(maxlen=self.half_life)
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the features CorrelationChange and

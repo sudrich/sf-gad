@@ -10,6 +10,9 @@ class VertexDegree(Feature):
     def __init__(self):
         self.names = ['VertexDegree']
 
+    def reset(self):
+        pass
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the vertex degree.

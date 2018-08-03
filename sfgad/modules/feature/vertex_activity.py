@@ -13,6 +13,9 @@ class VertexActivity(Feature):
         self.names = ['VertexActivity']
         self.nodes = []
 
+    def reset(self):
+        self.nodes = []
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the vertex activity.

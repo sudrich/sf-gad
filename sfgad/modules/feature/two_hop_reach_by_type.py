@@ -23,6 +23,9 @@ class TwoHopReachByType(Feature):
         # a dictionary, which contains the neighbors for each node
         self.neighbors = defaultdict(list)
 
+    def reset(self):
+        pass
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the two-hop reach.

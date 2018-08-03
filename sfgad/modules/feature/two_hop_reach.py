@@ -54,6 +54,9 @@ class TwoHopReach(Feature):
 
         return result_df
 
+    def reset(self):
+        pass
+
     def compute(self, node_name, t):
         # Not needed here, since this feature is to simple for multiprocessing
         pass

@@ -16,6 +16,9 @@ class VertexActivityByType(Feature):
         self.names = ['VertexActivityBy' + str(edge_type) for edge_type in edge_types]
         self.nodes = []
 
+    def reset(self):
+        self.nodes = []
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the vertex activity by edge type.

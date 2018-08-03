@@ -24,6 +24,9 @@ class IncidentTriangles(Feature):
         # a dictionary, which contains the ids of the neighbors for each node
         self.neighbors = defaultdict(list)
 
+    def reset(self):
+        pass
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the incident-triangles count.

@@ -13,6 +13,9 @@ class VertexDegreeByType(Feature):
     def __init__(self, edge_types):
         self.names = ['VertexDegreeBy' + str(edge_type) for edge_type in edge_types]
 
+    def reset(self):
+        pass
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the vertex degree by type.

@@ -18,6 +18,9 @@ class VertexDegreeDifferenceByType(Feature):
 
         self.previous_count_df = pd.DataFrame(columns=['name'] + self.names)
 
+    def reset(self):
+        self.previous_count_df = pd.DataFrame(columns=['name'] + self.names)
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each vertex the vertex degree difference by edge type.

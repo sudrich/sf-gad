@@ -43,6 +43,9 @@ class ExternalFeature(Feature):
 
         self.values_dict = values_dict
 
+    def reset(self):
+        pass
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and maps each node to its measured value at the current timestamp, if there

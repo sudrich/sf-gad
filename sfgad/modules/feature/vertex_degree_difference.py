@@ -14,6 +14,9 @@ class VertexDegreeDifference(Feature):
         self.previous_count_df = pd.DataFrame(columns=['name', 'VertexDegree'])
         self.only_active_nodes = only_active_nodes
 
+    def reset(self):
+        self.previous_count_df = pd.DataFrame(columns=['name', 'VertexDegree'])
+
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """
         Iterates over the current data frame and calculates for each active vertex the vertex degree difference.
