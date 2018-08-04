@@ -7,14 +7,14 @@ import numpy as np
 
 def total_benchmark():
     # Small Size
-    benchmark_direct_combiner(100, 3, 100, 100)
-    benchmark_ref_based_combiner(100, 3, 100, 100)
+    benchmark_direct_combiners(100, 3, 100, 100)
+    benchmark_ref_based_combiners(100, 3, 100, 100)
     # Medium Size
-    benchmark_direct_combiner(10000, 3, 1000, 20)
-    benchmark_ref_based_combiner(10000, 3, 1000, 20)
+    benchmark_direct_combiners(10000, 3, 1000, 20)
+    benchmark_ref_based_combiners(10000, 3, 1000, 20)
     # Large Size
-    benchmark_direct_combiner(1000000, 3, 10000, 5)
-    benchmark_ref_based_combiner(1000000, 3, 10000, 5)
+    benchmark_direct_combiners(1000000, 3, 10000, 5)
+    benchmark_ref_based_combiners(1000000, 3, 10000, 5)
 
 
 def generate_dataset(n_samples, n_features, n_observations):
@@ -32,7 +32,7 @@ def print_dataset_stats(n_samples, n_features, n_observations):
     print("%s %d" % ("Number of observations:".ljust(25), n_observations))
 
 
-def benchmark_direct_combiner(n_samples, n_features, n_observations, n_runs):
+def benchmark_direct_combiners(n_samples, n_features, n_observations, n_runs):
     p_values, ref_p_values = generate_dataset(n_samples, n_features, n_observations)
 
     combiners = [
@@ -69,7 +69,7 @@ def benchmark_direct_combiner(n_samples, n_features, n_observations, n_runs):
     print()
 
 
-def benchmark_ref_based_combiner(n_samples, n_features, n_observations, n_runs):
+def benchmark_ref_based_combiners(n_samples, n_features, n_observations, n_runs):
     p_values, ref_p_values = generate_dataset(n_samples, n_features, n_observations)
 
     combiners = [
