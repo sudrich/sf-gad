@@ -20,14 +20,14 @@ def total_benchmark():
 def generate_dataset(n_samples, n_features, n_observations):
     samples = pd.DataFrame(np.random.random((n_samples, n_features)),
                            columns=['f_' + str(i) for i in range(n_features)])
-    obsverations = pd.DataFrame(np.random.random((n_observations, n_features)),
+    observations = pd.DataFrame(np.random.random((n_observations, n_features)),
                                 columns=['f_' + str(i) for i in range(n_features)])
     weights = pd.DataFrame(np.random.random(n_observations), columns=['weight'])
 
     time_windows = np.random.randint(0, 10, n_observations)
-    obsverations['time_window'] = time_windows
+    observations['time_window'] = time_windows
     weights['time_window'] = time_windows
-    return samples, obsverations, weights
+    return samples, observations, weights
 
 
 def benchmark_parametric_estimators(n_samples, n_features, n_observations, n_runs):
