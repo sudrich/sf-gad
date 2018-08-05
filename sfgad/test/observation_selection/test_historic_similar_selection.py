@@ -31,7 +31,7 @@ class TestHistoricSimilarSelection(TestCase):
                                        'feature_B': [42.0, 142.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', None, self.db), target_df)
 
     def test_gather_with_limit(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A'], 'type': ['PERSON'],
@@ -40,4 +40,4 @@ class TestHistoricSimilarSelection(TestCase):
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
         self.sel_rule = HistoricSimilarSelection(limit=1)
-        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', None, self.db), target_df)

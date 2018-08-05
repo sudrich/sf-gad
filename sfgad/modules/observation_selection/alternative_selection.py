@@ -25,21 +25,23 @@ class AlternativeSelection(ObservationSelection):
         self.threshold = threshold
         self.limit = limit
 
-    def gather(self, vertex_name, vertex_type, database):
+    def gather(self, vertex_name, vertex_type, current_time_step, database):
         """
         Takes a vertex and a reference to the database.
         Returns a dataframe of all the relevant vertices that are needed for calculating p_value of the vertex.
-        :param vertex_name: The name of a vertex
+        :param vertex_name: The name of the vertex
         :param vertex_type: The type of the vertex
+        :param current_time_step: The current time step
         :param database: The reference to the Database
         :return: Dataframe of the relevant entries in the database
         """
+
         # get the results from the first rule
-        result = self.first_rule.gather(vertex_name, vertex_type, database)
+        result = self.first_rule.gather(vertex_name, vertex_type, current_time_step, database)
 
         # get the results from the second rule, if the first rule fails to provide enough observations
         if result.shape[0] < self.threshold:
-            result_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
+            result_second_rule = self.second_rule.gather(vertex_name, vertex_type, current_time_step, database)
             result = result_second_rule
 
         if self.limit is not None:

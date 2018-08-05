@@ -32,7 +32,7 @@ class TestHistoricAllSelection(TestCase):
                                        'feature_B': [42.0, 142.0, 242.0, 342.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        assert_frame_equal(self.sel_rule.gather(None, None, self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather(None, None, None, self.db), target_df)
 
     def test_gather_with_limit(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A'], 'type': ['PERSON'],
@@ -41,4 +41,4 @@ class TestHistoricAllSelection(TestCase):
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
         self.sel_rule = HistoricAllSelection(limit=1)
-        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', None, self.db), target_df)
