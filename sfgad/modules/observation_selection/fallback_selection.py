@@ -16,7 +16,7 @@ class FallbackSelection(ObservationSelection):
         if limit is not None:
             if not isinstance(limit, int) or not limit >= 1:
                 raise ValueError("The given parameter 'limit' should be an integer and >= 1!")
-            if limit <= threshold:
+            if limit < threshold:
                 raise ValueError("The given parameter 'limit' should be greater than the given parameter 'threshold'")
 
         self.first_rule = first_rule
