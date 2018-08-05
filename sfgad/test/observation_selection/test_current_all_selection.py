@@ -7,8 +7,7 @@ from sfgad.modules.observation_selection.helper.database import Database
 from sfgad.modules.observation_selection.current_all_selection import CurrentAllSelection
 
 
-class TestCurrentSimilarSelection(TestCase):
-
+class TestCurrentAllSelection(TestCase):
     def setUp(self):
         # establish a connection to the database
         self.db = Database(user='root', password='root', host='localhost', database='sfgad', table_name='historic_data',
@@ -44,4 +43,3 @@ class TestCurrentSimilarSelection(TestCase):
 
         self.sel_rule = CurrentAllSelection(limit=1)
         assert_frame_equal(self.sel_rule.gather(None, None, 2, self.db), target_df)
-
