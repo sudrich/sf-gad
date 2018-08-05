@@ -11,7 +11,7 @@ class Database:
     The format of the data-table should be: ['name', 'type', 'time_window', 'feature_1', ..., 'feature_n']
     The primary key is the tiple ('name', 'type', 'time_window')
     """
-    def __init__(self, user='root', password='root', host='localhost', database='sfgad', table_name='historic_data'):
+    def __init__(self, user, password, host, database, table_name, feature_names):
         # close any old MySQL connections
         gc.collect()
         # create a new connection
@@ -31,8 +31,42 @@ class Database:
                 print("The given database does not exist!")
             else:
                 print(e)
-        self.table_name = table_name
+
         self.cursor = self.cnn.cursor()
+        self.table_name = table_name
+        self.feature_names = feature_names
+
+        # create a new table with given table name (but delete an existing table first)
+        self.cursor.execute('DROP TABLE IF EXISTS ' + self.table_name)
+
+        # create the sql query for table creation
+        sql_query = 'CREATE TABLE ' + self.table_name + '(' \
+            'name VARCHAR(255) NOT NULL, ' \
+            'type VARCHAR(255) NOT NULL, ' \
+            'time_window INT NOT NULL, '
+        for name in feature_names:
+            sql_query += name + ' FLOAT(16,4), '
+        sql_query += 'PRIMARY KEY (name, type, time_window))'
+
+        self.cursor.execute(sql_query)
+
+    def insert_record(self, vertex_name, vertex_type, time_window, feature_values):
+        try:
+            values = [vertex_name, vertex_type, time_window] + feature_values
+
+            sql_query = 'INSERT INTO ' + self.table_name + ' VALUES ('
+            for i in range(len(values)):
+                if i + 1 != len(values):
+                    sql_query += '%s, '
+                else:
+                    sql_query += '%s)'
+
+            self.cursor.execute(sql_query, values)
+
+            self.cnn.commit()
+        except:
+            self.cnn.rollback()
+            raise ValueError("Record insertion failed!")
 
     def select_all(self):
         """
@@ -40,7 +74,6 @@ class Database:
         :return a dataframe with all historic data.
         """
         return pd.read_sql('SELECT * FROM ' + self.table_name, con=self.cnn)
-
 
     def select_by_vertex_name(self, vertex_name):
         """
@@ -58,11 +91,11 @@ class Database:
         """
         return pd.read_sql('SELECT * FROM ' + self.table_name + ' WHERE type=%s', con=self.cnn, params=[vertex_type])
 
-
     def close_connection(self):
         """
         Closes the database connection.
         """
+        self.cursor.close()
         self.cnn.close()
 
 
