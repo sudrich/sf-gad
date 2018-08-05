@@ -4,10 +4,10 @@ from unittest import TestCase
 from pandas.util.testing import assert_frame_equal
 
 from sfgad.modules.observation_selection.helper.database import Database
-from sfgad.modules.observation_selection.historic_same_selection import HistoricSameSelection
+from sfgad.modules.observation_selection.historic_all_selection import HistoricAllSelection
 
 
-class TestHistoricSameSelection(TestCase):
+class TestHistoricAllSelection(TestCase):
 
     def setUp(self):
         # establish a connection to the database
@@ -17,22 +17,22 @@ class TestHistoricSameSelection(TestCase):
         self.db.insert_record('Vertex_B', 'PERSON', 1, [124, 142])
         self.db.insert_record('Vertex_C', 'PICTURE', 1, [224, 242])
         self.db.insert_record('Vertex_D', 'POST', 1, [324, 342])
-        self.db.insert_record('Vertex_A', 'PERSON', 2, [12, 24])
 
         # init a selection rule
-        self.sel_rule = HistoricSameSelection()
+        self.sel_rule = HistoricAllSelection()
 
     def tearDown(self):
         # close db connection
         self.db.close_connection()
 
     def test_gather(self):
-        target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_A'], 'type': ['PERSON', 'PERSON'],
-                                       'time_window': [1, 2], 'feature_A': [24.0, 12.0],
-                                       'feature_B': [42.0, 24.0]},
+        target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_B', 'Vertex_C', 'Vertex_D'],
+                                       'type': ['PERSON', 'PERSON', 'PICTURE', 'POST'],
+                                       'time_window': [1, 1, 1, 1], 'feature_A': [24.0, 124.0, 224.0, 324.0],
+                                       'feature_B': [42.0, 142.0, 242.0, 342.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather(None, None, self.db), target_df)
 
     def test_gather_with_limit(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A'], 'type': ['PERSON'],
@@ -40,5 +40,5 @@ class TestHistoricSameSelection(TestCase):
                                        'feature_B': [42.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        self.sel_rule = HistoricSameSelection(limit=1)
+        self.sel_rule = HistoricAllSelection(limit=1)
         assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', self.db), target_df)
