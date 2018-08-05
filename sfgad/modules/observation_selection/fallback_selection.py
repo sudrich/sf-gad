@@ -35,20 +35,20 @@ class FallbackSelection(ObservationSelection):
         :return: Dataframe of the relevant entries in the database
         """
         # get the results from the first rule
-        results = self.first_rule.gather(vertex_name, vertex_type, database)
+        result = self.first_rule.gather(vertex_name, vertex_type, database)
 
         # get and append the results from the second rule if the first rule fails to provide enough observations
-        if results.shape[0] < self.threshold:
-            results_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
-            results = results.append(results_second_rule, ignore_index=True)
+        if result.shape[0] < self.threshold:
+            result_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
+            result = result.append(result_second_rule, ignore_index=True)
 
             # drop duplicate results
-            results.drop_duplicates(inplace=True)
+            result.drop_duplicates(inplace=True)
 
-            # reset index
-            results = results.reset_index(drop=True)
+        if self.limit is not None:
+            result = result.head(self.limit)
 
-        return results.head(self.limit)
+        # sort the records by time_window descending AND reset index
+        result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
 
-
-
+        return result

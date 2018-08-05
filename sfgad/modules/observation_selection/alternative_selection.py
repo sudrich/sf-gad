@@ -35,11 +35,14 @@ class AlternativeSelection(ObservationSelection):
         :return: Dataframe of the relevant entries in the database
         """
         # get the results from the first rule
-        results = self.first_rule.gather(vertex_name, vertex_type, database)
+        result = self.first_rule.gather(vertex_name, vertex_type, database)
 
         # get the results from the second rule, if the first rule fails to provide enough observations
-        if results.shape[0] < self.threshold:
-            results_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
-            results = results_second_rule
+        if result.shape[0] < self.threshold:
+            result_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
+            result = result_second_rule
 
-        return results.head(self.limit)
+        if self.limit is not None:
+            result = result.head(self.limit)
+
+        return result

@@ -29,4 +29,7 @@ class HistoricSameSelection(ObservationSelection):
         # sort the records by time_window descending AND reset index
         result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
 
-        return result.head(self.limit)
+        if self.limit is not None:
+            result = result.head(self.limit)
+
+        return result
