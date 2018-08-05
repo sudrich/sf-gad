@@ -4,7 +4,7 @@ from unittest import TestCase
 from pandas.util.testing import assert_frame_equal
 
 from sfgad.modules.observation_selection.helper.database import Database
-from sfgad.modules.observation_selection.additional_selection import AdditionalSelection
+from sfgad.modules.observation_selection.maximum_alternative_selection import MaximumAlternativeSelection
 from sfgad.modules.observation_selection.historic_same_selection import HistoricSameSelection
 from sfgad.modules.observation_selection.historic_similar_selection import HistoricSimilarSelection
 
@@ -22,7 +22,7 @@ class TestMaximumAlternativeSelection(TestCase):
         self.db.insert_record('Vertex_A', 'PERSON', 2, [12, 24])
 
         # init a selection rule
-        self.sel_rule = AdditionalSelection(first_rule=HistoricSameSelection(),
+        self.sel_rule = MaximumAlternativeSelection(first_rule=HistoricSameSelection(),
                                             second_rule=HistoricSimilarSelection())
 
     def tearDown(self):
@@ -45,7 +45,7 @@ class TestMaximumAlternativeSelection(TestCase):
                                        'feature_B': [24.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        self.sel_rule = AdditionalSelection(first_rule=HistoricSameSelection(),
+        self.sel_rule = MaximumAlternativeSelection(first_rule=HistoricSameSelection(),
                                             second_rule=HistoricSimilarSelection(),
                                             limit=1)
 
