@@ -9,8 +9,8 @@ from mysql.connector import errorcode
 class Database:
     """
     The format of the data-table should be: ['name', 'type', 'time_window', 'feature_1', ..., 'feature_n']
+    The primary key is the tiple ('name', 'type', 'time_window')
     """
-
     def __init__(self, user='root', password='root', host='localhost', database='sfgad', table_name='historic_data'):
         # close any old MySQL connections
         gc.collect()

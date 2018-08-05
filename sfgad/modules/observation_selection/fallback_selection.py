@@ -8,7 +8,7 @@ class FallbackSelection(ObservationSelection):
     """
 
     def __init__(self, first_rule, second_rule, threshold, limit=None):
-        # check whether limit is given and set self.limit if thats the case
+        # check whether limit is given and set self.limit if this is the case
         if not isinstance(threshold, int) or not threshold >= 1:
             raise ValueError("The given parameter 'threshold' should be an integer and >= 1!")
 
@@ -41,7 +41,8 @@ class FallbackSelection(ObservationSelection):
             results_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
             results = results.append(results_second_rule, ignore_index=True)
 
-        #TODO: Filtern von gleichen Einträgen
+            # drop duplicate results
+            results.drop_duplicates(inplace=True)
 
         return results.head(self.limit)
 
