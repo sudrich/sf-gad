@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from unittest import TestCase
-from sfgad.modules.probability_estimator.uniform import Uniform
+from sfgad.modules.probability_estimation.uniform import Uniform
 
 
 class TestUniform(TestCase):

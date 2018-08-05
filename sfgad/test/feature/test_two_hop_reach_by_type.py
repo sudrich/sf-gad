@@ -2,7 +2,7 @@ import pandas as pd
 
 from unittest import TestCase
 from pandas.util.testing import assert_frame_equal, assert_series_equal
-from sfgad.modules.feature.two_hop_reach_by_type import TwoHopReachByType
+from sfgad.modules.features.two_hop_reach_by_type import TwoHopReachByType
 
 
 class TestTwoHopReachByType(TestCase):

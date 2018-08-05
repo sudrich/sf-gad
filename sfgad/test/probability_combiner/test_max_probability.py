@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sfgad.modules.probability_combiner.max_probability import MaxProbability
+from sfgad.modules.probability_combination.max_probability import MaxProbability
 
 
 class TestMaxProbability(TestCase):

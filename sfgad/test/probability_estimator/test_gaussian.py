@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from unittest import TestCase
-from sfgad.modules.probability_estimator.gaussian import Gaussian
+from sfgad.modules.probability_estimation.gaussian import Gaussian
 
 
 class TestGaussian(TestCase):

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sfgad.modules.probability_combiner.min_probability import MinProbability
+from sfgad.modules.probability_combination.min_probability import MinProbability
 
 
 class TestMinProbability(TestCase):

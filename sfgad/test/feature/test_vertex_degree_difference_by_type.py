@@ -2,7 +2,7 @@ import pandas as pd
 
 from unittest import TestCase
 from pandas.util.testing import assert_frame_equal, assert_series_equal
-from sfgad.modules.feature.vertex_degree_difference_by_type import VertexDegreeDifferenceByType
+from sfgad.modules.features.vertex_degree_difference_by_type import VertexDegreeDifferenceByType
 
 
 class TestVertexDegreeDifferenceByType(TestCase):

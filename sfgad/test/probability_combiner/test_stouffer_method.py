@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sfgad.modules.probability_combiner.stouffer_method import StoufferMethod
+from sfgad.modules.probability_combination.stouffer_method import StoufferMethod
 
 
 class TestStoufferMethod(TestCase):

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sfgad.modules.probability_combiner.first_feature_probability import FirstFeatureProbability
+from sfgad.modules.probability_combination.first_feature_probability import FirstFeatureProbability
 
 
 class TestFirstFeatureProbability(TestCase):

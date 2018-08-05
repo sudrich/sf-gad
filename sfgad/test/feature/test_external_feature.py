@@ -3,7 +3,7 @@ import numpy as np
 
 from unittest import TestCase
 from pandas.util.testing import assert_frame_equal, assert_series_equal
-from sfgad.modules.feature.external_feature import ExternalFeature
+from sfgad.modules.features.external_feature import ExternalFeature
 
 
 class TestExternalFeature(TestCase):

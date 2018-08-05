@@ -1,6 +1,6 @@
 from time import time
 from math import ceil
-from sfgad.modules.probability_estimator import *
+from sfgad.modules.probability_estimation import *
 import pandas as pd
 import numpy as np
 

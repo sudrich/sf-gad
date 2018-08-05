@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from unittest import TestCase
-from sfgad.modules.probability_estimator.empirical_estimator import EmpiricalEstimator
+from sfgad.modules.probability_estimation.empirical_estimator import EmpiricalEstimator
 
 
 class TestEmpiricalEstimator(TestCase):

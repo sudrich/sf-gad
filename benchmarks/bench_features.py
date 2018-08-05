@@ -1,5 +1,5 @@
 from time import time
-from sfgad.modules.feature import *
+from sfgad.modules.features import *
 import networkx as nx
 import pandas as pd
 import numpy as np

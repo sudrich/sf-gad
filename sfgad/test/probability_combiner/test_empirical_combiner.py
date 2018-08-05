@@ -1,7 +1,7 @@
 import numpy as np
 
 from unittest import TestCase
-from sfgad.modules.probability_combiner.empirical_combiner import EmpiricalCombiner
+from sfgad.modules.probability_combination.empirical_combiner import EmpiricalCombiner
 
 
 class TestEmpiricalCombiner(TestCase):

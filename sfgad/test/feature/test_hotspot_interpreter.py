@@ -3,7 +3,7 @@ import pandas as pd
 import copy
 
 from collections import deque
-from sfgad.modules.feature.helper.hotspot_interpreter import HotSpotInterpreter
+from sfgad.modules.features.helper.hotspot_interpreter import HotSpotInterpreter
 
 
 class TestHotSpotInterpreter(unittest.TestCase):

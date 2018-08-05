@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sfgad.modules.probability_combiner.fisher_method import FisherMethod
+from sfgad.modules.probability_combination.fisher_method import FisherMethod
 
 
 class TestFisherMethod(TestCase):

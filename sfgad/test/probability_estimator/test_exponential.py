@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from unittest import TestCase
-from sfgad.modules.probability_estimator.exponential import Exponential
+from sfgad.modules.probability_estimation.exponential import Exponential
 
 
 class TestExponential(TestCase):

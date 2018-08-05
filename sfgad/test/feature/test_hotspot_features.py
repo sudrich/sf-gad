@@ -2,7 +2,7 @@ from unittest import TestCase
 import pandas as pd
 import numpy as np
 
-from sfgad.modules.feature.hotspot_features import HotSpotFeatures
+from sfgad.modules.features.hotspot_features import HotSpotFeatures
 from collections import deque
 from pandas.util.testing import assert_frame_equal, assert_series_equal
 

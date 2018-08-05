@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sfgad.modules.probability_combiner.avg_probability import AvgProbability
+from sfgad.modules.probability_combination.avg_probability import AvgProbability
 
 
 class TestAvgProbability(TestCase):
