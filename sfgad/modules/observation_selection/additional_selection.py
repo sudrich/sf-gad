@@ -1,18 +1,21 @@
 from .observation_selection import ObservationSelection
 
 
-class HistoricSimilarSelection(ObservationSelection):
+class AdditionalSelection(ObservationSelection):
     """
-    This observation selection gathers all historic observations of all recorded vertices of the same type.
-    The results can be limited by providing a limit parameter.
+    This observation selection includes 2 selection rules. This selection apply both rules and returns the combination
+    of the results.
     """
 
-    def __init__(self, limit=None):
-        # check whether limit is given and set self.limit if thats the case
+    def __init__(self, first_rule, second_rule, limit=None):
+
+        # check whether limit is given and whether its greater than threshold
         if limit is not None:
             if not isinstance(limit, int) or not limit >= 1:
                 raise ValueError("The given parameter 'limit' should be an integer and >= 1!")
 
+        self.first_rule = first_rule
+        self.second_rule = second_rule
         self.limit = limit
 
     def gather(self, vertex_name, vertex_type, database):
@@ -24,7 +27,15 @@ class HistoricSimilarSelection(ObservationSelection):
         :param database: The reference to the Database
         :return: Dataframe of the relevant entries in the database
         """
-        result = database.select_by_vertex_type(vertex_type)
+        # get the results from the first rule
+        result_first_rule = self.first_rule.gather(vertex_name, vertex_type, database)
+
+        # get the results from the second rule
+        result_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
+
+        # combine the results and drop duplicates
+        result = result_first_rule.append(result_second_rule, ignore_index=True)
+        result.drop_duplicates(inplace=True)
 
         # sort the records by time_window descending AND reset index
         result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)

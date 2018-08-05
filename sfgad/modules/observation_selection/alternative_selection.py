@@ -1,11 +1,11 @@
 from .observation_selection import ObservationSelection
 
 
-class FallbackSelection(ObservationSelection):
+class AlternativeSelection(ObservationSelection):
     """
     This observation selection includes 2 selection rules. If the first selection rule fails to provide enough
-    observations, this selection falls back on a secondary rule and returns combined observations of the two
-    selection rules.
+    observations, this selection falls back on a secondary rule and returns only the observations of the second
+    selection rule.
     """
 
     def __init__(self, first_rule, second_rule, threshold, limit=None):
@@ -37,18 +37,12 @@ class FallbackSelection(ObservationSelection):
         # get the results from the first rule
         result = self.first_rule.gather(vertex_name, vertex_type, database)
 
-        # get and append the results from the second rule if the first rule fails to provide enough observations
+        # get the results from the second rule, if the first rule fails to provide enough observations
         if result.shape[0] < self.threshold:
             result_second_rule = self.second_rule.gather(vertex_name, vertex_type, database)
-            result = result.append(result_second_rule, ignore_index=True)
-
-            # drop duplicate results
-            result.drop_duplicates(inplace=True)
+            result = result_second_rule
 
         if self.limit is not None:
             result = result.head(self.limit)
-
-        # sort the records by time_window descending AND reset index
-        result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
 
         return result
