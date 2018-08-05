@@ -1,9 +1,9 @@
 from .observation_selection import ObservationSelection
 
 
-class HistoricSameSelection(ObservationSelection):
+class CurrentSimilarSelection(ObservationSelection):
     """
-    This observation selection gathers all historic observations of the requested vertex.
+    This observation selection gathers all current observations of all vertices of the same type.
     The results can be limited by providing a limit parameter.
     """
 
@@ -26,10 +26,11 @@ class HistoricSameSelection(ObservationSelection):
         :return: Dataframe of the relevant entries in the database
         """
 
-        result = database.select_by_vertex_name(vertex_name)
+        result = database.select_by_time_step(current_time_window)
 
-        # sort the records by time_window descending AND reset index
-        result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
+        # filter rows by vertex_type
+        result = result[result['type'] == vertex_type]
+        result = result.reset_index(drop=True)
 
         if self.limit is not None:
             result = result.head(self.limit)

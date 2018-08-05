@@ -91,6 +91,16 @@ class Database:
         """
         return pd.read_sql('SELECT * FROM ' + self.table_name + ' WHERE type=%s', con=self.cnn, params=[vertex_type])
 
+    def select_by_time_step(self, time_window):
+        """
+        Selects all rows in the database where time_window=time_window.
+        :param vertex_type: The given vertex type.
+        :return a dataframe with all historic data of vertices, which are of the given type.
+        """
+        return pd.read_sql('SELECT * FROM ' + self.table_name + ' WHERE time_window=%s', con=self.cnn,
+                           params=[time_window])
+
+
     def close_connection(self):
         """
         Closes the database connection.
