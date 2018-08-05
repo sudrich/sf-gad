@@ -33,16 +33,16 @@ class TestFallbackSelection(TestCase):
     def test_gather(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_A', 'Vertex_B'],
                                        'type': ['PERSON', 'PERSON', 'PERSON'],
-                                       'time_window': [1, 2, 1], 'feature_A': [24.0, 12.0, 124.0],
-                                       'feature_B': [42.0, 24.0, 142.0]},
+                                       'time_window': [2, 1, 1], 'feature_A': [12.0, 24.0, 124.0],
+                                       'feature_B': [24.0, 42.0, 142.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
         assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', self.db), target_df)
 
     def test_gather_with_limit(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A'], 'type': ['PERSON'],
-                                       'time_window': [1], 'feature_A': [24.0],
-                                       'feature_B': [42.0]},
+                                       'time_window': [2], 'feature_A': [12.0],
+                                       'feature_B': [24.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
         self.sel_rule = FallbackSelection(first_rule=HistoricSameSelection(),

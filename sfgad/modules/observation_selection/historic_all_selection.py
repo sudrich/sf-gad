@@ -24,4 +24,9 @@ class HistoricAllSelection(ObservationSelection):
         :param database: The reference to the Database
         :return: Dataframe of the relevant entries in the database
         """
-        return database.select_all().head(self.limit)
+        result = database.select_all()
+
+        # sort the records by time_window descending AND reset index
+        result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
+
+        return result.head(self.limit)

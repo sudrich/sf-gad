@@ -4,7 +4,8 @@ from .observation_selection import ObservationSelection
 class FallbackSelection(ObservationSelection):
     """
     This observation selection includes 2 selection rules. If the first selection rule fails to provide enough
-    observations, this selection falls back on a secondary rule.
+    observations, this selection falls back on a secondary rule and returns combined observations of the two
+    selection rules.
     """
 
     def __init__(self, first_rule, second_rule, threshold, limit=None):
@@ -43,6 +44,9 @@ class FallbackSelection(ObservationSelection):
 
             # drop duplicate results
             results.drop_duplicates(inplace=True)
+
+            # reset index
+            results = results.reset_index(drop=True)
 
         return results.head(self.limit)
 
