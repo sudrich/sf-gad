@@ -14,6 +14,11 @@ class InMemoryDatabase(Database):
         self.database = pd.DataFrame(
             columns=['name', 'type', 'time_window'] + feature_names)
 
+        # define data types of the columns
+        self.database['time_window'] = self.database['time_window'].astype('int64')
+        for feature in feature_names:
+            self.database[feature] = self.database[feature].astype('float64')
+
         self.feature_names = feature_names
 
     def insert_record(self, vertex_name, vertex_type, time_window, feature_values):
@@ -26,7 +31,7 @@ class InMemoryDatabase(Database):
         """
         self.database = self.database.append(
             pd.DataFrame(
-                data=np.array([[vertex_name, vertex_type, time_window] + feature_values]),
+                data=[[vertex_name, vertex_type, time_window] + feature_values],
                 columns=['name', 'type', 'time_window'] + self.feature_names), ignore_index=True)
 
     def select_all(self):
