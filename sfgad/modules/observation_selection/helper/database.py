@@ -2,7 +2,6 @@ import abc
 
 
 class Database(metaclass=abc.ABCMeta):
-
     @abc.abstractmethod
     def insert_record(self, vertex_name, vertex_type, time_window, feature_values):
         """
@@ -11,6 +10,13 @@ class Database(metaclass=abc.ABCMeta):
         :param vertex_type: The type of the vertex.
         :param time_window: The time step.
         :param feature_values: The corresponding feature values in a list.
+        """
+
+    @abc.abstractmethod
+    def insert_records(self, records):
+        """
+        Inserts a record to the database.
+        :param records: DataFrame where each row is a record with meta information about the vertex and its features.
         """
 
     @abc.abstractmethod

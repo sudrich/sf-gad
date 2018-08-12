@@ -1,10 +1,10 @@
-import pandas as pd
-
-import mysql.connector
 import gc
 
-from .database import Database
+import mysql.connector
+import pandas as pd
 from mysql.connector import errorcode
+
+from .database import Database
 
 
 class ExternalSQLDatabase(Database):
@@ -12,6 +12,7 @@ class ExternalSQLDatabase(Database):
     The format of the data-table should be: ['name', 'type', 'time_window', 'feature_1', ..., 'feature_n']
     The primary key is the tiple ('name', 'type', 'time_window')
     """
+
     def __init__(self, user, password, host, database, table_name, feature_names):
         # close any old MySQL connections
         gc.collect()
@@ -42,9 +43,9 @@ class ExternalSQLDatabase(Database):
 
         # create the sql query for table creation
         sql_query = 'CREATE TABLE ' + self.table_name + '(' \
-            'name VARCHAR(255) NOT NULL, ' \
-            'type VARCHAR(255) NOT NULL, ' \
-            'time_window INT NOT NULL, '
+                                                        'name VARCHAR(255) NOT NULL, ' \
+                                                        'type VARCHAR(255) NOT NULL, ' \
+                                                        'time_window INT NOT NULL, '
         for name in feature_names:
             sql_query += name + ' FLOAT(16,4), '
         sql_query += 'PRIMARY KEY (name, type, time_window))'
@@ -75,6 +76,13 @@ class ExternalSQLDatabase(Database):
         except:
             self.cnn.rollback()
             raise ValueError("Record insertion failed!")
+
+    def insert_records(self, records):
+        """
+        Inserts a record to the database.
+        :param records: DataFrame where each row is a record with meta information about the vertex and its features.
+        """
+        records.to_sql(self.table_name, con=self.cnn, if_exists='append')
 
     def select_all(self):
         """
@@ -114,5 +122,3 @@ class ExternalSQLDatabase(Database):
         """
         self.cursor.close()
         self.cnn.close()
-
-

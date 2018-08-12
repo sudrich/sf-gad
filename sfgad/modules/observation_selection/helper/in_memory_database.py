@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 from .database import Database
 
@@ -33,6 +32,13 @@ class InMemoryDatabase(Database):
             pd.DataFrame(
                 data=[[vertex_name, vertex_type, time_window] + feature_values],
                 columns=['name', 'type', 'time_window'] + self.feature_names), ignore_index=True)
+
+    def insert_records(self, records):
+        """
+        Inserts a record to the database.
+        :param records: DataFrame where each row is a record with meta information about the vertex and its features.
+        """
+        self.database = self.database.append(records, ignore_index=True)
 
     def select_all(self):
         """
