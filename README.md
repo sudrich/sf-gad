@@ -29,7 +29,7 @@ I provides:
 * Pandas: 0.22.0 or higher
 * NetworkX: 1.11.0 or higher
 
-#### Installation
+#### Installation (coming soon)
 
 Installation of the latest release is available at the [Python
 package index](https://pypi.org/project/sfgad) and on conda.
