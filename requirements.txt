@@ -3,3 +3,4 @@ scipy >= 0.13.3
 pandas >= 0.22.0
 networkx == 1.11.0
 joblib >= 0.12.2
+mysql-connector-python >= 8.0.12
