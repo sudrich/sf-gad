@@ -1,20 +1,21 @@
-import pandas as pd
-
 from unittest import TestCase
+
+import pandas as pd
 from pandas.util.testing import assert_frame_equal
 
-from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
-from sfgad.modules.observation_selection.minimum_alternative_selection import MinimumAlternativeSelection
+# from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
+from sfgad.modules.observation_selection.helper.in_memory_database import InMemoryDatabase
 from sfgad.modules.observation_selection.historic_same_selection import HistoricSameSelection
 from sfgad.modules.observation_selection.historic_similar_selection import HistoricSimilarSelection
+from sfgad.modules.observation_selection.minimum_alternative_selection import MinimumAlternativeSelection
 
 
 class TestMinimumAlternativeSelection(TestCase):
-
     def setUp(self):
         # establish a connection to the database
-        self.db = ExternalSQLDatabase(user='root', password='root', host='localhost', database='sfgad', table_name='historic_data',
-                                      feature_names=['feature_A', 'feature_B'])
+        # self.db = ExternalSQLDatabase(user='root', password='root', host='localhost', database='sfgad',
+        #                              table_name='historic_data', feature_names=['feature_A', 'feature_B'])
+        self.db = InMemoryDatabase(feature_names=['feature_A', 'feature_B'])
         self.db.insert_record('Vertex_A', 'PERSON', 1, [24, 42])
         self.db.insert_record('Vertex_B', 'PERSON', 1, [124, 142])
         self.db.insert_record('Vertex_C', 'PICTURE', 1, [224, 242])
@@ -50,4 +51,3 @@ class TestMinimumAlternativeSelection(TestCase):
                                                     limit=1)
 
         assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', None, self.db), target_df)
-

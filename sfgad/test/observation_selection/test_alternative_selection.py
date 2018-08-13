@@ -1,21 +1,20 @@
-import pandas as pd
-
 from unittest import TestCase
+
+import pandas as pd
 from pandas.util.testing import assert_frame_equal
 
-from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
-from sfgad.modules.observation_selection.helper.in_memory_database import InMemoryDatabase
 from sfgad.modules.observation_selection.alternative_selection import AlternativeSelection
+# from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
+from sfgad.modules.observation_selection.helper.in_memory_database import InMemoryDatabase
 from sfgad.modules.observation_selection.historic_same_selection import HistoricSameSelection
 from sfgad.modules.observation_selection.historic_similar_selection import HistoricSimilarSelection
 
 
 class TestAlternativeSelection(TestCase):
-
     def setUp(self):
         # establish a connection to the database
-        #self.db = ExternalSQLDatabase(user='root', password='root', host='localhost', database='sfgad', table_name='historic_data',
-        #                              feature_names=['feature_A', 'feature_B'])
+        # self.db = ExternalSQLDatabase(user='root', password='root', host='localhost', database='sfgad',
+        #                              table_name='historic_data', feature_names=['feature_A', 'feature_B'])
         self.db = InMemoryDatabase(feature_names=['feature_A', 'feature_B'])
         self.db.insert_record('Vertex_A', 'PERSON', 1, [24, 42])
         self.db.insert_record('Vertex_B', 'PERSON', 1, [124, 142])
@@ -28,9 +27,9 @@ class TestAlternativeSelection(TestCase):
                                              second_rule=HistoricSimilarSelection(),
                                              threshold=2)
 
-    #def tearDown(self):
+        # def tearDown(self):
         # close db connection
-        #self.db.close_connection()
+        # self.db.close_connection()
 
     def test_gather(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_A', 'Vertex_B'],

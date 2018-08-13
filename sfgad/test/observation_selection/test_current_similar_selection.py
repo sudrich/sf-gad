@@ -1,18 +1,19 @@
-import pandas as pd
-
 from unittest import TestCase
+
+import pandas as pd
 from pandas.util.testing import assert_frame_equal
 
-from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
 from sfgad.modules.observation_selection.current_similar_selection import CurrentSimilarSelection
+# from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
+from sfgad.modules.observation_selection.helper.in_memory_database import InMemoryDatabase
 
 
 class TestCurrentSimilarSelection(TestCase):
-
     def setUp(self):
         # establish a connection to the database
-        self.db = ExternalSQLDatabase(user='root', password='root', host='localhost', database='sfgad', table_name='historic_data',
-                                      feature_names=['feature_A', 'feature_B'])
+        # self.db = ExternalSQLDatabase(user='root', password='root', host='localhost', database='sfgad',
+        #                              table_name='historic_data', feature_names=['feature_A', 'feature_B'])
+        self.db = InMemoryDatabase(feature_names=['feature_A', 'feature_B'])
         self.db.insert_record('Vertex_A', 'PERSON', 1, [24, 42])
         self.db.insert_record('Vertex_B', 'PERSON', 1, [124, 142])
         self.db.insert_record('Vertex_C', 'PICTURE', 1, [224, 242])
