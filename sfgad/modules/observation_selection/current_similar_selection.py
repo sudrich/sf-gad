@@ -29,8 +29,7 @@ class CurrentSimilarSelection(ObservationSelection):
         result = database.select_by_time_step(current_time_window)
 
         # filter rows by vertex_type
-        result = result[result['type'] == vertex_type]
-        result = result.reset_index(drop=True)
+        result = result[result['type'] == vertex_type].reset_index(drop=True)
 
         if self.limit is not None:
             result = result.head(self.limit)

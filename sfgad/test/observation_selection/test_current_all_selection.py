@@ -25,8 +25,8 @@ class TestCurrentAllSelection(TestCase):
         self.sel_rule = CurrentAllSelection()
 
     #def tearDown(self):
-        # close db connection
-        #self.db.close_connection()
+    #    # close db connection
+    #    self.db.close_connection()
 
     def test_gather(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_C'],

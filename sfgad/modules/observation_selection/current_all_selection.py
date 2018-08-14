@@ -26,7 +26,7 @@ class CurrentAllSelection(ObservationSelection):
         :return: Dataframe of the relevant entries in the database
         """
 
-        result = database.select_by_time_step(current_time_window)
+        result = database.select_by_time_step(current_time_window).reset_index(drop=True)
 
         if self.limit is not None:
             result = result.head(self.limit)
