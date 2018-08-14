@@ -1,9 +1,9 @@
 from .observation_selection import ObservationSelection
 
 
-class HistoricAgeAllSelection(ObservationSelection):
+class HistoricAgeSimilarSelection(ObservationSelection):
     """
-    This observation selection gathers all historic observations of all vertices with the same age.
+    This observation selection gathers all historic observations of all vertices with the same age and same type.
     Age is defined as the difference between the current time window and the first occurrence of an observation.
     The results can be limited by providing a limit parameter.
     """
@@ -35,7 +35,8 @@ class HistoricAgeAllSelection(ObservationSelection):
 
         # add all historic observations of all vertices with the same age
         for other_name, other_type in relevant_vertices:
-            result = result.append(database.select_by_vertex_name(other_name))
+            if other_type == vertex_type:
+                result = result.append(database.select_by_vertex_name(other_name))
 
         # sort the records by time_window descending AND reset index
         result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
