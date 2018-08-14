@@ -3,6 +3,7 @@ from .alternative_selection import AlternativeSelection
 from .current_all_selection import CurrentAllSelection
 from .current_similar_selection import CurrentSimilarSelection
 from .fallback_selection import FallbackSelection
+from .historic_age_all_selection import HistoricAgeAllSelection
 from .helper.external_sql_database import ExternalSQLDatabase
 from .helper.in_memory_database import InMemoryDatabase
 from .historic_all_selection import HistoricAllSelection

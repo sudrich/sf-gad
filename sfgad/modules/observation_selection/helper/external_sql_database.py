@@ -52,6 +52,9 @@ class ExternalSQLDatabase(Database):
 
         self.cursor.execute(sql_query)
 
+        # create a dictionary with first occurrences information of vertices
+        self.first_occurrences = {}
+
     def insert_record(self, vertex_name, vertex_type, time_window, feature_values):
         """
         Inserts a record to the database.
@@ -60,6 +63,10 @@ class ExternalSQLDatabase(Database):
         :param time_window: The time step.
         :param feature_values: The corresponding feature values in a list.
         """
+        # if first occurrence, add a new entry to self.first_occurrences
+        if (vertex_name, vertex_type) not in self.first_occurrences:
+            self.first_occurrences[(vertex_name, vertex_type)] = time_window
+
         try:
             values = [vertex_name, vertex_type, time_window] + feature_values
 
@@ -82,6 +89,11 @@ class ExternalSQLDatabase(Database):
         Inserts a record to the database.
         :param records: DataFrame where each row is a record with meta information about the vertex and its features.
         """
+        # for each entry: if first occurrence, add a new entry to self.first_occurrences
+        for vertex_name, vertex_type, time_window in zip(records['name'], records['type'], records['time_window']):
+            if (vertex_name, vertex_type) not in self.first_occurrences:
+                self.first_occurrences[(vertex_name, vertex_type)] = time_window
+
         records.to_sql(self.table_name, con=self.cnn, if_exists='append')
 
     def select_all(self):
@@ -115,6 +127,23 @@ class ExternalSQLDatabase(Database):
         """
         return pd.read_sql('SELECT * FROM ' + self.table_name + ' WHERE time_window=%s', con=self.cnn,
                            params=[time_window])
+
+    def get_vertices_same_age(self, vertex_name, vertex_type):
+        """
+        Returns a list with all existing vertices with same age as the given vertex (given vertex not included).
+        :param vertex_name: The given vertex_name.
+        :param vertex_type: The given vertex type.
+        :return a a list with all existing vertices with same age as the given vertex.
+        """
+        age = self.first_occurrences[(vertex_name, vertex_type)]
+        vertices_same_age = []
+
+        # extract all vertices with the same age
+        for key, value in self.first_occurrences.items():
+            if value == age and key != (vertex_name, vertex_type):
+                vertices_same_age.append(key)
+
+        return vertices_same_age
 
     def close_connection(self):
         """

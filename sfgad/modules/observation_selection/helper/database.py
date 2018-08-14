@@ -49,3 +49,12 @@ class Database(metaclass=abc.ABCMeta):
         :param time_window: The given time window.
         :return a dataframe with all historic data of vertices, which have the same time window entry.
         """
+
+    @abc.abstractmethod
+    def get_vertices_same_age(self, vertex_name, vertex_type):
+        """
+        Returns a list with all existing vertices with same age as the given vertex (given vertex not included).
+        :param vertex_name: The given vertex_name.
+        :param vertex_type: The given vertex type.
+        :return a a list with all existing vertices with same age as the given vertex.
+        """
