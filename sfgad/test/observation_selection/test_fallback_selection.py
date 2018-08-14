@@ -27,9 +27,9 @@ class TestFallbackSelection(TestCase):
                                           second_rule=HistoricSimilarSelection(),
                                           threshold=3)
 
-    def tearDown(self):
-        # close db connection
-        self.db.close_connection()
+    #def tearDown(self):
+    #    # close db connection
+    #    self.db.close_connection()
 
     def test_gather(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_B', 'Vertex_A'],

@@ -24,9 +24,9 @@ class TestCurrentSimilarSelection(TestCase):
         # init a selection rule
         self.sel_rule = CurrentSimilarSelection()
 
-    def tearDown(self):
-        # close db connection
-        self.db.close_connection()
+    #def tearDown(self):
+    #    # close db connection
+    #    self.db.close_connection()
 
     def test_gather(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_C'],

@@ -26,9 +26,9 @@ class TestAdditionalSelection(TestCase):
         self.sel_rule = AdditionalSelection(first_rule=HistoricSameSelection(),
                                             second_rule=HistoricSimilarSelection())
 
-        # def tearDown(self):
-        # close db connection
-        # self.db.close_connection()
+    #def tearDown(self):
+    #    # close db connection
+    #    self.db.close_connection()
 
     def test_gather(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_A', 'Vertex_B'],
