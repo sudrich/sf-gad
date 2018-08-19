@@ -1,14 +1,14 @@
+from collections import deque
 from unittest import TestCase
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+from pandas.util.testing import assert_frame_equal, assert_series_equal
 
 from sfgad.modules.features.hotspot_features import HotSpotFeatures
-from collections import deque
-from pandas.util.testing import assert_frame_equal, assert_series_equal
 
 
 class TestHotSpotFeatures(TestCase):
-
     def setUp(self):
 
         self.df_1 = pd.DataFrame({
@@ -55,7 +55,6 @@ class TestHotSpotFeatures(TestCase):
                                               'MagnitudeChange': [-27.892136, -22.313708, -8.010025,
                                                                   np.nan, np.nan, np.nan]},
                                         columns=['name', 'CorrelationChange', 'MagnitudeChange'])
-
 
     def test_init(self):
         self.assertEqual(self.hotspot_features.names, ["CorrelationChange", "MagnitudeChange"])

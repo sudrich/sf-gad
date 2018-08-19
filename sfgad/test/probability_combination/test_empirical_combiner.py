@@ -1,11 +1,11 @@
+from unittest import TestCase
+
 import numpy as np
 
-from unittest import TestCase
 from sfgad.modules.probability_combination.empirical_combiner import EmpiricalCombiner
 
 
 class TestEmpiricalCombiner(TestCase):
-
     def setUp(self):
         self.combiner = EmpiricalCombiner()
 

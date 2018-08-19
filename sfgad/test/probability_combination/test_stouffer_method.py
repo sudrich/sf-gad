@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.stouffer_method import StoufferMethod
 
 
 class TestStoufferMethod(TestCase):
-
     def setUp(self):
         self.combiner = StoufferMethod()
 

@@ -2,7 +2,6 @@ import abc
 
 
 class ProbabilityCombiner(metaclass=abc.ABCMeta):
-
     @abc.abstractmethod
     def combine(self, p_values, ref_p_values=None):
         """

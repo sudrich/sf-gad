@@ -1,13 +1,13 @@
-import pandas as pd
-import numpy as np
-
 from unittest import TestCase
+
+import numpy as np
+import pandas as pd
 from pandas.util.testing import assert_frame_equal, assert_series_equal
+
 from sfgad.modules.features.external_feature import ExternalFeature
 
 
 class TestExternalFeature(TestCase):
-
     def setUp(self):
         self.df = pd.DataFrame({'TIMESTAMP': ['2018-01-01 00:00:00', '2018-01-01 00:00:05', '2018-01-01 00:00:09'],
                                 'SRC_NAME': ['A', 'A', 'B'],
@@ -91,14 +91,12 @@ class TestExternalFeature(TestCase):
         assert_frame_equal(feature.process_vertices(self.df, 1), target_df)
 
     def test_wrong_input(self):
-
         # the given argument is not a dictionary
         values_dict = 42
 
         self.assertRaises(ValueError, ExternalFeature, values_dict)
 
     def test_dict_wrong_scheme_1(self):
-
         # nor all keys are strings
         values_dict = {
             'A': [(pd.to_datetime('2018-01-01 00:00:01'), -1), (pd.to_datetime('2018-01-01 00:00:11'), 42)],
@@ -109,7 +107,6 @@ class TestExternalFeature(TestCase):
         self.assertRaises(ValueError, ExternalFeature, values_dict)
 
     def test_dict_wrong_scheme_2(self):
-
         # not all values are lists
         values_dict = {
             'A': [(pd.to_datetime('2018-01-01 00:00:01'), -1), (pd.to_datetime('2018-01-01 00:00:11'), 42)],
@@ -120,7 +117,6 @@ class TestExternalFeature(TestCase):
         self.assertRaises(ValueError, ExternalFeature, values_dict)
 
     def test_dict_wrong_scheme_3(self):
-
         # not all list elements are tuples
         values_dict = {
             'A': [42, (pd.to_datetime('2018-01-01 00:00:11'), 42)],
@@ -131,7 +127,6 @@ class TestExternalFeature(TestCase):
         self.assertRaises(ValueError, ExternalFeature, values_dict)
 
     def test_dict_wrong_scheme_4(self):
-
         # a list element with wrong time-type
         values_dict = {
             'A': [(pd.to_datetime('2018-01-01 00:00:01'), -1), (pd.to_datetime('2018-01-01 00:00:11'), 42)],
@@ -142,7 +137,6 @@ class TestExternalFeature(TestCase):
         self.assertRaises(ValueError, ExternalFeature, values_dict)
 
     def test_dict_wrong_scheme_5(self):
-
         # a list is not sorted by time
         values_dict = {
             'A': [(pd.to_datetime('2018-01-01 00:00:11'), 42), (pd.to_datetime('2018-01-01 00:00:01'), -1)],

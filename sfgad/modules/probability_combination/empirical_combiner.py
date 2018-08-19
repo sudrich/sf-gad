@@ -4,7 +4,6 @@ from .probability_combiner import ProbabilityCombiner
 
 
 class EmpiricalCombiner(ProbabilityCombiner):
-
     def __init__(self, direction='left-tailed'):
 
         if direction not in ['right-tailed', 'left-tailed']:

@@ -1,9 +1,8 @@
-import pandas as pd
-import numpy as np
-
 from collections import defaultdict, deque
 from functools import partial
-from joblib import Parallel, delayed
+
+import numpy as np
+import pandas as pd
 
 from .feature import Feature
 from .helper.hotspot_interpreter import HotSpotInterpreter
@@ -80,7 +79,6 @@ class HotSpotFeatures(Feature):
         #     results = self.compute_multiple_nodes(t, node_names)
 
         results = self.compute_multiple_nodes(t, node_names)
-
 
         # update all activity
         if self.update_activity:

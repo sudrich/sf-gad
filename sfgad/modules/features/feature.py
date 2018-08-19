@@ -2,7 +2,6 @@ import abc
 
 
 class Feature(metaclass=abc.ABCMeta):
-
     @abc.abstractmethod
     def process_vertices(self, df_edges, n_jobs, update_activity=True):
         """

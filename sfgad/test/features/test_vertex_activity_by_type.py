@@ -1,12 +1,12 @@
-import pandas as pd
-
 from unittest import TestCase
+
+import pandas as pd
 from pandas.util.testing import assert_frame_equal, assert_series_equal
+
 from sfgad.modules.features.vertex_activity_by_type import VertexActivityByType
 
 
 class TestVertexActivityByType(TestCase):
-
     def setUp(self):
         self.df_1 = pd.DataFrame({'TIMESTAMP': ['2018-01-01 00:00:00', '2018-01-01 00:00:01', '2018-01-01 00:00:05'],
                                   'E_TYPE': ['LIKE', 'LIKE', 'MESSAGE'],
@@ -26,7 +26,8 @@ class TestVertexActivityByType(TestCase):
 
         # the target output of the feature after 1. (2.) time step
         self.target_df_1 = pd.DataFrame(data={'name': ['A', 'B', 'C'], 'VertexActivityByLIKE': [1, 1, 1],
-                                              'VertexActivityByMESSAGE': [0, 1, 1], 'VertexActivityByFRIENDSHIP': [0, 0, 0]},
+                                              'VertexActivityByMESSAGE': [0, 1, 1],
+                                              'VertexActivityByFRIENDSHIP': [0, 0, 0]},
                                         columns=['name', 'VertexActivityByLIKE', 'VertexActivityByMESSAGE',
                                                  'VertexActivityByFRIENDSHIP'])
         self.target_df_2 = pd.DataFrame(data={'name': ['A', 'B', 'D', 'C'], 'VertexActivityByLIKE': [1, 1, 1, 0],

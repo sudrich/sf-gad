@@ -1,5 +1,7 @@
-from .feature import Feature
 import pandas as pd
+
+from .feature import Feature
+
 
 class VertexDegreeDifference(Feature):
     """

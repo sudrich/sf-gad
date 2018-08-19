@@ -2,7 +2,6 @@ from .probability_combiner import ProbabilityCombiner
 
 
 class SelectedFeatureProbability(ProbabilityCombiner):
-
     def __init__(self, feature_position=0):
         """
         :param feature_position: Position of feature in p_values list. Default is the position 0.

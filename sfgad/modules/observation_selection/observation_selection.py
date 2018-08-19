@@ -2,7 +2,6 @@ import abc
 
 
 class ObservationSelection:
-
     @abc.abstractmethod
     def gather(self, vertex_name, vertex_type, current_time_window, database):
         """

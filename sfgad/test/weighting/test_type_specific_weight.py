@@ -1,5 +1,6 @@
-import pandas as pd
 from unittest import TestCase
+
+import pandas as pd
 
 from sfgad.modules.weighting.weighting import Weighting
 
@@ -55,11 +56,11 @@ class TypeSpecificWeight(TestCase):
     def test_functionality(self):
         time_window = 1
         dfs = [pd.DataFrame({'name': [None], 'type': ['GUEST'], 'age': [None],
-                            'time_window': [1], 'time': [None], 'feature': [None]}),
-              pd.DataFrame({'name': [None], 'type': ['USER'], 'age': [None],
-                            'time_window': [1], 'time': [None], 'feature': [None]}),
-              pd.DataFrame({'name': [None], 'type': ['ADMIN'], 'age': [None],
-                            'time_window': [1], 'time': [None], 'feature': [None]})]
+                             'time_window': [1], 'time': [None], 'feature': [None]}),
+               pd.DataFrame({'name': [None], 'type': ['USER'], 'age': [None],
+                             'time_window': [1], 'time': [None], 'feature': [None]}),
+               pd.DataFrame({'name': [None], 'type': ['ADMIN'], 'age': [None],
+                             'time_window': [1], 'time': [None], 'feature': [None]})]
         weight_dfs_check = [pd.DataFrame({'time_window': [1], 'weight': [0.5]}),
                             pd.DataFrame({'time_window': [1], 'weight': [0.75]}),
                             pd.DataFrame({'time_window': [1], 'weight': [1.0]})]

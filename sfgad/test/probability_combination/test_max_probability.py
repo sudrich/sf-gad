@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.max_probability import MaxProbability
 
 
 class TestMaxProbability(TestCase):
-
     def setUp(self):
         self.combiner = MaxProbability()
 

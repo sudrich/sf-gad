@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.selected_feature_probability import SelectedFeatureProbability
 
 
 class TestSelectedFeatureProbability(TestCase):
-
     def setUp(self):
         self.combiner = SelectedFeatureProbability(feature_position=2)
 
@@ -37,4 +37,3 @@ class TestSelectedFeatureProbability(TestCase):
 
         # expect an assertion error
         self.assertRaises(ValueError, combiner.combine, p_values)
-

@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.min_probability import MinProbability
 
 
 class TestMinProbability(TestCase):
-
     def setUp(self):
         self.combiner = MinProbability()
 

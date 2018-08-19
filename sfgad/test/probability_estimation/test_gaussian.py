@@ -1,12 +1,12 @@
+from unittest import TestCase
+
 import numpy as np
 import pandas as pd
 
-from unittest import TestCase
 from sfgad.modules.probability_estimation.gaussian import Gaussian
 
 
 class TestGaussian(TestCase):
-
     def setUp(self):
         self.estimator = Gaussian()
 
@@ -23,7 +23,6 @@ class TestGaussian(TestCase):
             columns=['weight', 'time_window'])
 
     def test_estimator_output(self):
-
         # test the right output with direction='left-tailed'
         np.testing.assert_almost_equal(
             self.estimator.estimate(self.features_values, self.reference_features_values, self.weights),
@@ -120,7 +119,8 @@ class TestGaussian(TestCase):
 
         # wrong value type
         reference_features_values_6 = pd.DataFrame(
-            data={'Feature_A': [40, 45, 'String', 39, 43], 'Feature_B': [0, 1, 0, 1, 2], 'time_window': [0, 1, 2, 3, 4]},
+            data={'Feature_A': [40, 45, 'String', 39, 43], 'Feature_B': [0, 1, 0, 1, 2],
+                  'time_window': [0, 1, 2, 3, 4]},
             columns=['Feature_A', 'Feature_B', 'time_window'])
 
         # expect a value error on reference_features_values_1

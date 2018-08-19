@@ -2,7 +2,6 @@ import abc
 
 
 class ProbabilityEstimator(metaclass=abc.ABCMeta):
-
     @abc.abstractmethod
     def estimate(self, features_values, reference_features_values, weights):
         """

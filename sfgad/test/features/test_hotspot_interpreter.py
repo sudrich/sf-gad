@@ -1,27 +1,26 @@
-import unittest
-import pandas as pd
 import copy
-
+import unittest
 from collections import deque
+
+import pandas as pd
+
 from sfgad.modules.features.helper.hotspot_interpreter import HotSpotInterpreter
 
 
 class TestHotSpotInterpreter(unittest.TestCase):
-
     def setUp(self):
-
         self.df_1 = pd.DataFrame({'TIMESTAMP': ['2018-01-01 00:00:00', '2018-01-01 00:00:01', '2018-01-01 00:00:05'],
-                             'SRC_NAME': ['A', 'A', 'B'],
-                             'SRC_TYPE': ['NODE', 'NODE', 'NODE'],
-                             'DST_NAME': ['B', 'C', 'C'],
-                             'DST_TYPE': ['NODE', 'NODE', 'NODE']})
+                                  'SRC_NAME': ['A', 'A', 'B'],
+                                  'SRC_TYPE': ['NODE', 'NODE', 'NODE'],
+                                  'DST_NAME': ['B', 'C', 'C'],
+                                  'DST_TYPE': ['NODE', 'NODE', 'NODE']})
         self.df_1['TIMESTAMP'] = pd.to_datetime(self.df_1['TIMESTAMP'])
 
         self.df_2 = pd.DataFrame({'TIMESTAMP': ['2018-01-01 00:00:10', '2018-01-01 00:00:12', '2018-01-01 00:00:14'],
-                             'SRC_NAME': ['A', 'A', 'C'],
-                             'SRC_TYPE': ['NODE', 'NODE', 'NODE'],
-                             'DST_NAME': ['B', 'C', 'D'],
-                             'DST_TYPE': ['NODE', 'NODE', 'NODE']})
+                                  'SRC_NAME': ['A', 'A', 'C'],
+                                  'SRC_TYPE': ['NODE', 'NODE', 'NODE'],
+                                  'DST_NAME': ['B', 'C', 'D'],
+                                  'DST_TYPE': ['NODE', 'NODE', 'NODE']})
         self.df_2['TIMESTAMP'] = pd.to_datetime(self.df_2['TIMESTAMP'])
 
         self.window_size = 10
@@ -42,16 +41,15 @@ class TestHotSpotInterpreter(unittest.TestCase):
         self.assertEqual(self.interpreter.fit_buffer[-1], (pd.Timestamp.min, 0, {}, {}))
 
     def test_interpret(self):
-
         self.assertEqual(self.interpreter.interpret(self.df_1), (pd.Timestamp('2018-01-01 00:00:05'), ['A', 'B', 'C']))
 
         fit_buffer = deque([(pd.Timestamp('1677-09-21 00:12:43.145225'), 0, {}, {}),
-               (pd.Timestamp('2018-01-01 00:00:05'),
-                3,
-                {(0, 1): (pd.Timestamp('2018-01-01 00:00:05'), 1),
-                 (0, 2): (pd.Timestamp('2018-01-01 00:00:05'), 1),
-                 (1, 2): (pd.Timestamp('2018-01-01 00:00:05'), 1)},
-                {0: [1, 2], 1: [0, 2], 2: [0, 1]})])
+                            (pd.Timestamp('2018-01-01 00:00:05'),
+                             3,
+                             {(0, 1): (pd.Timestamp('2018-01-01 00:00:05'), 1),
+                              (0, 2): (pd.Timestamp('2018-01-01 00:00:05'), 1),
+                              (1, 2): (pd.Timestamp('2018-01-01 00:00:05'), 1)},
+                             {0: [1, 2], 1: [0, 2], 2: [0, 1]})])
 
         self.assertEqual(self.interpreter.fit_buffer, fit_buffer)
 
@@ -101,7 +99,6 @@ class TestHotSpotInterpreter(unittest.TestCase):
         self.assertEqual(self.interpreter.get_neighbors(0), [1, 2, 3])
 
     def test_turn_back_time(self):
-
         # let the interpreter intepret the 1. dataframe and make a copy
         self.interpreter.interpret(self.df_1)
         interpreter_copy = copy.deepcopy(self.interpreter)

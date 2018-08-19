@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.avg_probability import AvgProbability
 
 
 class TestAvgProbability(TestCase):
-
     def setUp(self):
         self.combiner = AvgProbability()
 

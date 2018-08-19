@@ -4,7 +4,6 @@ from .probability_combiner import ProbabilityCombiner
 
 
 class AvgProbability(ProbabilityCombiner):
-
     def combine(self, p_values, ref_p_values=None):
         """
         Takes a list of p_values and combines them into a single p_value by calculating the average.

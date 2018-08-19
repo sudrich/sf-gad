@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.fisher_method import FisherMethod
 
 
 class TestFisherMethod(TestCase):
-
     def setUp(self):
         self.combiner = FisherMethod()
 

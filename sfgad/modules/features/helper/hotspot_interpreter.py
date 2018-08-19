@@ -1,7 +1,7 @@
-import pandas as pd
-import numpy as np
-from collections import defaultdict, deque
 import copy
+from collections import defaultdict, deque
+
+import pandas as pd
 
 
 class HotSpotInterpreter:

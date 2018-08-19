@@ -1,9 +1,9 @@
 from unittest import TestCase
+
 from sfgad.modules.probability_combination.first_feature_probability import FirstFeatureProbability
 
 
 class TestFirstFeatureProbability(TestCase):
-
     def setUp(self):
         self.combiner = FirstFeatureProbability()
 

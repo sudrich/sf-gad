@@ -1,9 +1,10 @@
-import pandas as pd
-import numpy as np
 import datetime
+from itertools import dropwhile
+
+import numpy as np
+import pandas as pd
 
 from .feature import Feature
-from itertools import dropwhile
 
 
 class ExternalFeature(Feature):
@@ -21,7 +22,7 @@ class ExternalFeature(Feature):
         if not isinstance(values_dict, dict):
             raise ValueError("Error! The given argument 'values_dict' should be a dictionary with node names as keys "
                              "and lists of measured data (time, value) as values!")
-        #  all keys should be strings, ...
+        # all keys should be strings, ...
         if not all(isinstance(k, str) for k in values_dict.keys()):
             raise ValueError("Error! Not all keys are strings in the given dictionary!")
         # ... all values should be lists

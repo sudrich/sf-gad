@@ -1,12 +1,12 @@
+from unittest import TestCase
+
 import numpy as np
 import pandas as pd
 
-from unittest import TestCase
 from sfgad.modules.probability_estimation.exponential import Exponential
 
 
 class TestExponential(TestCase):
-
     def setUp(self):
         self.estimator = Exponential()
 
@@ -23,7 +23,6 @@ class TestExponential(TestCase):
             columns=['weight', 'time_window'])
 
     def test_estimator_output(self):
-
         # test the right output with direction='left-tailed'
         self.assertEqual(
             self.estimator.estimate(self.features_values, self.reference_features_values, self.weights), [1.0, 0.0])
@@ -117,7 +116,8 @@ class TestExponential(TestCase):
 
         # wrong value type
         reference_features_values_6 = pd.DataFrame(
-            data={'Feature_A': [40, 45, 'String', 39, 43], 'Feature_B': [0, 1, 0, 1, 2], 'time_window': [0, 1, 2, 3, 4]},
+            data={'Feature_A': [40, 45, 'String', 39, 43], 'Feature_B': [0, 1, 0, 1, 2],
+                  'time_window': [0, 1, 2, 3, 4]},
             columns=['Feature_A', 'Feature_B', 'time_window'])
 
         # expect a value error on reference_features_values_1
@@ -199,5 +199,3 @@ class TestExponential(TestCase):
         # expect a value error
         self.assertRaises(ValueError, self.estimator.estimate, self.features_values, self.reference_features_values,
                           weights)
-
-
