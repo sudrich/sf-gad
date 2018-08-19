@@ -20,22 +20,23 @@ class TestCurrentSimilarSelection(TestCase):
         self.db.insert_record('Vertex_D', 'POST', 1, [324, 342])
         self.db.insert_record('Vertex_A', 'PERSON', 2, [12, 24])
         self.db.insert_record('Vertex_C', 'PERSON', 2, [11, 22])
+        self.db.insert_record('Vertex_D', 'POST', 2, [324, 342])
 
         # init a selection rule
         self.sel_rule = CurrentSimilarSelection()
 
-    #def tearDown(self):
+    # def tearDown(self):
     #    # close db connection
     #    self.db.close_connection()
 
     def test_gather(self):
-        target_df = pd.DataFrame(data={'name': ['Vertex_A', 'Vertex_C'],
-                                       'type': ['PERSON', 'PERSON'],
-                                       'time_window': [2, 2], 'feature_A': [12.0, 11.0],
-                                       'feature_B': [24.0, 22.0]},
+        target_df = pd.DataFrame(data={'name': ['Vertex_A'],
+                                       'type': ['PERSON'],
+                                       'time_window': [2], 'feature_A': [12.0],
+                                       'feature_B': [24.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        assert_frame_equal(self.sel_rule.gather(None, 'PERSON', 2, self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_C', 'PERSON', 2, self.db), target_df)
 
     def test_gather_with_limit(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A'], 'type': ['PERSON'],
@@ -44,4 +45,4 @@ class TestCurrentSimilarSelection(TestCase):
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
         self.sel_rule = CurrentSimilarSelection(limit=1)
-        assert_frame_equal(self.sel_rule.gather(None, 'PERSON', 2, self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_C', 'PERSON', 2, self.db), target_df)

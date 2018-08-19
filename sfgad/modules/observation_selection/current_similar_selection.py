@@ -28,8 +28,8 @@ class CurrentSimilarSelection(ObservationSelection):
 
         result = database.select_by_time_step(current_time_window)
 
-        # filter rows by vertex_type
-        result = result[result['type'] == vertex_type].reset_index(drop=True)
+        # filter rows by vertex_type and filter the given vertex from the results
+        result = result[(result['name'] != vertex_name) & (result['type'] == vertex_type)].reset_index(drop=True)
 
         if self.limit is not None:
             result = result.head(self.limit)

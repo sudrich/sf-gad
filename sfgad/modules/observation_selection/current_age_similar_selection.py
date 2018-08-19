@@ -36,7 +36,7 @@ class CurrentAgeSimilarSelection(ObservationSelection):
         result = database.select_by_time_step(current_time_window)
 
         # keep only relevant vertices
-        relevant_rows = [x in relevant_vertices + [('Vertex_B', 'PERSON')] for x in zip(result['name'], result['type'])]
+        relevant_rows = [x in relevant_vertices for x in zip(result['name'], result['type'])]
 
         # subset the results and reset index
         result = result[relevant_rows].reset_index(drop=True)

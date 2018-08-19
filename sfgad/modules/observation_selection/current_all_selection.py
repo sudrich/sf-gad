@@ -28,6 +28,9 @@ class CurrentAllSelection(ObservationSelection):
 
         result = database.select_by_time_step(current_time_window).reset_index(drop=True)
 
+        # filter the given vertex from the results
+        result = result[result['name'] != vertex_name].reset_index(drop=True)
+
         if self.limit is not None:
             result = result.head(self.limit)
 
