@@ -28,6 +28,9 @@ class HistoricAllSelection(ObservationSelection):
 
         result = database.select_all()
 
+        # keep only historic values
+        result = result.loc[result['time_window'] < current_time_window]
+
         # sort the records by time_window descending AND reset index
         result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
 

@@ -21,13 +21,14 @@ class TestFallbackSelection(TestCase):
         self.db.insert_record('Vertex_C', 'PICTURE', 1, [224, 242])
         self.db.insert_record('Vertex_D', 'POST', 1, [324, 342])
         self.db.insert_record('Vertex_A', 'PERSON', 2, [12, 24])
+        self.db.insert_record('Vertex_A', 'PERSON', 3, [142, 24])
 
         # init a selection rule
         self.sel_rule = FallbackSelection(first_rule=HistoricSameSelection(),
                                           second_rule=HistoricSimilarSelection(),
                                           threshold=3)
 
-    #def tearDown(self):
+    # def tearDown(self):
     #    # close db connection
     #    self.db.close_connection()
 
@@ -38,7 +39,7 @@ class TestFallbackSelection(TestCase):
                                        'feature_B': [24.0, 142.0, 42.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        assert_frame_equal(self.sel_rule.gather('Vertex_B', 'PERSON', None, self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_B', 'PERSON', 3, self.db), target_df)
 
     def test_gather_with_limit(self):
         target_df = pd.DataFrame(data={'name': ['Vertex_A'], 'type': ['PERSON'],
@@ -49,4 +50,4 @@ class TestFallbackSelection(TestCase):
         self.sel_rule = FallbackSelection(first_rule=HistoricSameSelection(),
                                           second_rule=HistoricSimilarSelection(),
                                           threshold=1, limit=1)
-        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', None, self.db), target_df)
+        assert_frame_equal(self.sel_rule.gather('Vertex_A', 'PERSON', 3, self.db), target_df)

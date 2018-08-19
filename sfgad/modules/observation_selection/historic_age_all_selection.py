@@ -37,6 +37,9 @@ class HistoricAgeAllSelection(ObservationSelection):
         for other_name, other_type in relevant_vertices:
             result = result.append(database.select_by_vertex_name(other_name))
 
+        # keep only historic values
+        result = result.loc[result['time_window'] < current_time_window]
+
         # sort the records by time_window descending AND reset index
         result = result.sort_values(['time_window'], ascending=False).reset_index(drop=True)
 
