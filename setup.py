@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-DISTNAME = 'sf-gad'
+DISTNAME = 'sfgad'
 DESCRIPTION = 'A statistical framework for graph anomaly detection'
 MAINTAINER = 'Simon Sudrich'
 MAINTAINER_EMAIL = 'uzcyg@student.kit.edu'
@@ -11,7 +11,6 @@ LICENSE = 'GPL-3.0'
 import sfgad
 
 VERSION = sfgad.__version__
-
 
 SCIPY_MIN_VERSION = '0.13.3'
 NUMPY_MIN_VERSION = '1.8.2'
