@@ -67,7 +67,7 @@ class EmpiricalEstimator(ProbabilityEstimator):
 
         # check that the values of each feature are all floats (or integers)
         for feature_name in features_values.columns.values.tolist():
-            if not isinstance(features_values.iloc[0][feature_name], (np.int64, np.float64)):
+            if not isinstance(features_values.iloc[0][feature_name], (int, np.int64, float, np.float64)):
                 raise ValueError(
                     "The values of each feature in features_values should all be of the type 'int' or 'float'")
             if not all(
