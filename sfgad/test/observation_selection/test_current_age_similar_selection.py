@@ -3,7 +3,7 @@ from unittest import TestCase
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
 
-from sfgad.modules.observation_selection.current_age_all_selection import CurrentAgeAllSelection
+from sfgad.modules.observation_selection.current_age_similar_selection import CurrentAgeSimilarSelection
 # from sfgad.modules.observation_selection.helper.external_sql_database import ExternalSQLDatabase
 from sfgad.modules.observation_selection.helper.in_memory_database import InMemoryDatabase
 
@@ -16,13 +16,14 @@ class TestCurrentAgeAllSelection(TestCase):
         self.db = InMemoryDatabase(feature_names=['feature_A', 'feature_B'])
         self.db.insert_record('Vertex_A', 'PERSON', 1, [24, 42])
         self.db.insert_record('Vertex_B', 'PERSON', 1, [24, 12])
-        self.db.insert_record('Vertex_C', 'PICTURE', 2, [224, 242])
+        self.db.insert_record('Vertex_C', 'PICTURE', 1, [224, 242])
         self.db.insert_record('Vertex_D', 'POST', 2, [324, 342])
         self.db.insert_record('Vertex_A', 'PERSON', 2, [12, 24])
         self.db.insert_record('Vertex_B', 'PERSON', 2, [124, 142])
+        self.db.insert_record('Vertex_C', 'PICTURE', 2, [224, 242])
 
         # init a selection rule
-        self.sel_rule = CurrentAgeAllSelection()
+        self.sel_rule = CurrentAgeSimilarSelection()
 
     # def tearDown(self):
     #    # close db connection
@@ -43,5 +44,5 @@ class TestCurrentAgeAllSelection(TestCase):
                                        'feature_B': [24.0]},
                                  columns=['name', 'type', 'time_window', 'feature_A', 'feature_B'])
 
-        self.sel_rule = CurrentAgeAllSelection(limit=1)
+        self.sel_rule = CurrentAgeSimilarSelection(limit=1)
         assert_frame_equal(self.sel_rule.gather('Vertex_B', 'PERSON', 2, self.db), target_df)
