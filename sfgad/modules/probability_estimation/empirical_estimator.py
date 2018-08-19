@@ -1,11 +1,10 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from .probability_estimator import ProbabilityEstimator
 
 
 class EmpiricalEstimator(ProbabilityEstimator):
-
     def __init__(self, direction='left-tailed'):
 
         if direction not in ['right-tailed', 'left-tailed', 'two-tailed']:
@@ -71,22 +70,23 @@ class EmpiricalEstimator(ProbabilityEstimator):
             if not isinstance(features_values.iloc[0][feature_name], (np.int64, np.float64)):
                 raise ValueError(
                     "The values of each feature in features_values should all be of the type 'int' or 'float'")
-            if not all(isinstance(x, (np.int64, np.float64)) for x in reference_features_values[feature_name]):
+            if not all(
+                    isinstance(x, (int, np.int64, float, np.float64)) for x in reference_features_values[feature_name]):
                 raise ValueError(
                     "The values of each feature in reference_features_values should all be of the type 'int' or "
                     "'float'")
 
         # check that the values of the time windows are all floats (or integers)
-        if not all(isinstance(x, (np.int64, np.float64)) for x in reference_features_values['time_window']):
+        if not all(isinstance(x, (int, np.int64, float, np.float64)) for x in reference_features_values['time_window']):
             raise ValueError(
                 "The values of the time windows in reference_features_values should all be of the type 'int' or "
                 "'float'!")
-        if not all(isinstance(x, (np.int64, np.float64)) for x in weights['time_window']):
+        if not all(isinstance(x, (int, np.int64, float, np.float64)) for x in weights['time_window']):
             raise ValueError(
                 "The values of the time windows in weights should all be of the type 'int' or 'float'!")
 
         # check that the values of the weights are all floats (or integers)
-        if not all(isinstance(x, (np.int64, np.float64)) for x in weights['weight']):
+        if not all(isinstance(x, (int, np.int64, float, np.float64)) for x in weights['weight']):
             raise ValueError(
                 "The values of 'weight' in weights should all be of the type 'int' or 'float'!")
 
