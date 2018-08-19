@@ -1,7 +1,8 @@
+from collections import defaultdict
+
 import pandas as pd
 
 from .feature import Feature
-from collections import defaultdict
 
 
 class TwoHopReach(Feature):
@@ -48,6 +49,8 @@ class TwoHopReach(Feature):
 
         # transform the dictionary to a data frame
         result_df = pd.DataFrame(list(two_hop_neighborhood.items()), columns=['name', 'TwoHopReach'])
+        # sort by name column
+        result_df = result_df.sort_values(by=['name']).reset_index(drop=True)
 
         # reset neighbors dictionary
         self.neighbors = defaultdict(list)

@@ -1,7 +1,8 @@
+from collections import defaultdict, Counter
+
 import pandas as pd
 
 from .feature import Feature
-from collections import defaultdict, Counter
 
 
 class TwoHopReachByType(Feature):
@@ -64,6 +65,9 @@ class TwoHopReachByType(Feature):
             result_df = result_df.append(data, ignore_index=True)
 
         result_df = result_df.fillna(0)
+
+        # sort by name column
+        result_df = result_df.sort_values(by=['name']).reset_index(drop=True)
 
         # reset all dictionaries
         self.feature_names = {}

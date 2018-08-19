@@ -1,7 +1,8 @@
+from collections import defaultdict
+
 import pandas as pd
 
 from .feature import Feature
-from collections import defaultdict
 
 
 class IncidentTrianglesByType(Feature):
@@ -83,6 +84,9 @@ class IncidentTrianglesByType(Feature):
         missing_columns = [col for col in self.names if col not in result_df.columns]
         for col in missing_columns:
             result_df[col] = 0
+
+        # sort by name column
+        result_df = result_df.sort_values(by=['name']).reset_index(drop=True)
 
         # reset all dictionaries
         self.ids = self.inv_ids = {}
