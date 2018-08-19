@@ -1,5 +1,6 @@
 ![SFGAD](./doc/img/logo.png)
 ---
+[![Travis](https://api.travis-ci.com/sudrich/sf-gad.svg?branch=master)](https://travis-ci.com/sudrich/sf-gad)
 
 SFGAD is a tool for detecting anomalies in **graph** and **graph streams** with python.
 
