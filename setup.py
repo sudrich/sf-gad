@@ -12,9 +12,13 @@ import sfgad
 
 VERSION = sfgad.__version__
 
+
 SCIPY_MIN_VERSION = '0.13.3'
 NUMPY_MIN_VERSION = '1.8.2'
 PANDAS_MIN_VERSION = '0.22.0'
+NETWORKX_MIN_VERSION = 1.11.0
+JOBLIB_MIN_VERSION = 0.12.2
+MYSQL_CONNECTOR_MIN_VERSION = .0.12
 
 
 def setup_package():
@@ -30,7 +34,10 @@ def setup_package():
                     install_requires=[
                         'numpy>={0}'.format(NUMPY_MIN_VERSION),
                         'pandas>={0}'.format(PANDAS_MIN_VERSION),
-                        'scipy>={0}'.format(SCIPY_MIN_VERSION)
+                        'scipy>={0}'.format(SCIPY_MIN_VERSION),
+                        'networkx>={0}'.format(NETWORKX_MIN_VERSION),
+                        'joblib=={0}'.format(JOBLIB_MIN_VERSION),
+                        'mysql-connector-python>={0}'.format(MYSQL_CONNECTOR_MIN_VERSION)
                     ],
                     )
 
