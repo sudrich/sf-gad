@@ -1,7 +1,8 @@
+from collections import defaultdict
+
 import pandas as pd
 
 from .feature import Feature
-from collections import defaultdict
 
 
 class IncidentTriangles(Feature):
@@ -51,7 +52,7 @@ class IncidentTriangles(Feature):
 
         # count the incident triangles for each vertex
         incident_triangles = defaultdict(int)
-        for v in self.neighbors:
+        for v in self.inv_ids:
             # sort the neighbors in ascending order
             v_neighbors = sorted(self.neighbors[v])
 
@@ -65,6 +66,8 @@ class IncidentTriangles(Feature):
 
         # transform the dictionary to a data frame
         result_df = pd.DataFrame(list(incident_triangles.items()), columns=['name', 'IncidentTriangles'])
+        # sort by name column
+        result_df = result_df.sort_values(by=['name']).reset_index(drop=True)
 
         # reset all dictionaries
         self.ids = self.inv_ids = {}
