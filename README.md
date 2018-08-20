@@ -1,4 +1,4 @@
-![SFGAD](./doc/img/logo.png)
+![SFGAD](https://raw.githubusercontent.com/sudrich/sf-gad/master/doc/img/logo.png)
 ---
 [![Travis](https://api.travis-ci.com/sudrich/sf-gad.svg?branch=master)](https://travis-ci.com/sudrich/sf-gad)
 
@@ -16,7 +16,7 @@ I provides:
 ### Process
 ---
 
-![Process](./doc/img/sfgad.png)
+![Process](https://raw.githubusercontent.com/sudrich/sf-gad/master/doc/img/sfgad.png)
 
 
 ### Installation
