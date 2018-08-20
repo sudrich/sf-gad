@@ -20,7 +20,7 @@ def dapa(half_life=10, n_jobs=4):
     probability_combiner = SelectedFeatureProbability()
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
 
@@ -39,7 +39,7 @@ def dapa_modified(half_life=10, n_jobs=4):
     probability_combiner = SelectedFeatureProbability()
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
 
@@ -69,7 +69,7 @@ def hotspot(half_life=10, window_size=24 * 60 * 60, mode='HC', n_jobs=4):
         raise ValueError("Mode unsupported for HotSpot.")
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
 
@@ -99,7 +99,7 @@ def hotspot_modified(half_life=10, window_size=24 * 60 * 60, mode='HC', n_jobs=4
         raise ValueError("Mode unsupported for HotSpot.")
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
 
@@ -131,7 +131,7 @@ def hotspot_modified(half_life=10, window_size=24 * 60 * 60, mode='HC', n_jobs=4
 #         raise ValueError("Mode unsupported for DND.")
 #
 #     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-#                         probability_combiner, n_jobs)
+#                         probability_combiner, n_jobs=n_jobs)
 #
 #     return analyzer
 
@@ -149,7 +149,7 @@ def dnd_modified(n_jobs=4):
     probability_combiner = SelectedFeatureProbability()
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
 
@@ -168,7 +168,7 @@ def nphgs(edge_types=tuple('TYPE'), n_jobs=4):
     probability_combiner = EmpiricalCombiner()
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
 
@@ -188,6 +188,6 @@ def nphgs_modified(edge_types=tuple('TYPE'), half_life=10, n_jobs=4):
     probability_combiner = EmpiricalCombiner()
 
     analyzer = Analyzer(features_list, observation_gatherer, weighting_function, probability_estimator,
-                        probability_combiner, n_jobs)
+                        probability_combiner, n_jobs=n_jobs)
 
     return analyzer
