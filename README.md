@@ -32,16 +32,10 @@ I provides:
 * Pandas: 0.22.0 or higher
 * NetworkX: 1.11.0 or higher
 
-#### Installation (coming soon)
+#### Installation
 
 Installation of the latest release is available at the [Python
-package index](https://pypi.org/project/sfgad) and on conda.
-
-```sh
-conda install sfgad
-```
-
-or 
+package index](https://pypi.org/project/sfgad).
 
 ```sh
 pip install sfgad
