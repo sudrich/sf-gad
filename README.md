@@ -52,6 +52,10 @@ For testing use pytest from the source directory:
 pytest sfgad
 ```
 
+### Usage
+
+The framework defines an modular interface that allows full customization of the analysis process. For examples, see the tutorials on [using a pre-defined analyzer](https://github.com/sudrich/sf-gad/blob/master/examples/predefined_analyzer.ipynb) and [using a custom analyzer](https://github.com/sudrich/sf-gad/blob/master/examples/custom_analyzer.ipynb).
+
 ## Acknowledgements
 
 This work originated from the QuestMiner project (grant no. 01IS12051) and was partially funded by the German Federal Ministry of Education and Research (BMBF).
