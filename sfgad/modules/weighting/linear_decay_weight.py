@@ -1,6 +1,6 @@
 import numpy as np
-import pandas as pd
 
+from sfgad.utils.validation import check_meta_info_dataframe, check_meta_info_series
 from .weighting import Weighting
 
 
@@ -13,18 +13,9 @@ class LinearDecayWeight(Weighting):
     def __init__(self, factor=0.5):
         self.factor = factor
 
-    def compute(self, reference_feature_values, time_window):
-        if not isinstance(reference_feature_values, pd.DataFrame):
-            raise TypeError
-        if not isinstance(time_window, int):
-            raise TypeError
-        if reference_feature_values.empty:
-            raise ValueError
-        if time_window <= 0:
-            raise ValueError
+    def compute(self, reference_meta_info, current_meta_info):
+        check_meta_info_dataframe(reference_meta_info, required_columns=['time_window'])
+        check_meta_info_series(current_meta_info, required_columns=['time_window'])
 
-        reference_feature_values.fillna(0)
-        weight_df = pd.DataFrame(reference_feature_values['time_window'], columns=['time_window'], dtype=np.int)
-        weight_df['weight'] = 1 - (time_window - weight_df['time_window']) * self.factor
-        weight_df['weight'] = weight_df['weight'].clip(lower=0.0)
-        return weight_df
+        return np.clip(1 - self.factor * (current_meta_info['time_window'] - reference_meta_info['time_window']),
+                       a_min=0.0, a_max=None)

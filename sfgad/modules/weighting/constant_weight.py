@@ -1,6 +1,6 @@
 import numpy as np
-import pandas as pd
 
+from sfgad.utils.validation import check_meta_info_dataframe, check_meta_info_series
 from .weighting import Weighting
 
 
@@ -9,21 +9,11 @@ class ConstantWeight(Weighting):
     This weighting function assigns a constant default weight of to every record
     """
 
-    def __init__(self, default_weight=1):
-        self.weight = default_weight
+    def __init__(self, weight=1):
+        self.weight = weight
 
-    def compute(self, reference_feature_values, time_window):
-        if not isinstance(reference_feature_values, pd.DataFrame):
-            raise TypeError
-        if not isinstance(time_window, int):
-            raise TypeError
-        if reference_feature_values.empty:
-            raise ValueError
-        if time_window <= 0:
-            raise ValueError
+    def compute(self, reference_meta_info, current_meta_info):
+        check_meta_info_dataframe(reference_meta_info, required_columns=[])
+        check_meta_info_series(current_meta_info, required_columns=[])
 
-        reference_feature_values.fillna(0)
-        weight_df = pd.DataFrame(reference_feature_values['time_window'],
-                                 columns=['time_window'], dtype=np.int)
-        weight_df['weight'] = self.weight
-        return weight_df
+        return np.full(len(reference_meta_info), self.weight)

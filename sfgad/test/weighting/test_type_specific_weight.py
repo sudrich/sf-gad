@@ -1,70 +1,60 @@
 from unittest import TestCase
 
+import numpy as np
 import pandas as pd
 
-from sfgad.modules.weighting.weighting import Weighting
+from sfgad.modules.weighting import TypeSpecificWeight
 
 
-class TypeSpecificWeight(TestCase):
+class TestTypeSpecificWeight(TestCase):
     def setUp(self):
-        from sfgad.modules.weighting.type_specific_weight import TypeSpecificWeight
         type_dict = {'GUEST': 0.5, 'USER': 0.75, 'ADMIN': 1.0}
-        self.type_spec_wgt = TypeSpecificWeight(type_dict)
+        self.weighting_function = TypeSpecificWeight(type_dict)
 
-    def test_class_type_check(self):
-        self.assertTrue(isinstance(self.type_spec_wgt, Weighting))
+    def test_ref_observations_not_as_dataframe(self):
+        # Basically a valid input, but a numpy array instead of a pandas DataFrame
+        # The numpy array is an invalid input since it lacks indication of columns
+        ref_meta_info = np.array([['USER', 'USER', 'GUEST', 'ADMIN']])
+        current_meta_info = pd.Series({})
 
-    def test_type_of_reference_feature_values(self):
-        reference_feature_values_lst = [None, 10, 'test_string', 2.0]
-        time_window = 1
-        for reference_feature_values in reference_feature_values_lst:
-            with self.assertRaises(TypeError):
-                self.type_spec_wgt.compute(reference_feature_values, time_window)
+        self.assertRaises(TypeError, self.weighting_function.compute, ref_meta_info, current_meta_info)
 
-    def test_type_of_time_window(self):
-        reference_feature_values = pd.DataFrame()
-        time_window_lst = [None, 'test', pd.DataFrame(), 2.0]
-        for time_window in time_window_lst:
-            with self.assertRaises(TypeError):
-                self.type_spec_wgt.compute(reference_feature_values, time_window)
+    def test_current_observation_not_as_series(self):
+        # Basically a valid input, but a numpy array instead of a pandas DataFrame
+        # The numpy array is an invalid input since it lacks indication of columns
+        ref_meta_info = pd.DataFrame({'type': [1, 2, 3, 4]})
+        current_meta_info = np.array([])
 
-    def test_values_of_reference_feature_values(self):
-        ref_feature_val_lst = [pd.DataFrame(),
-                               pd.DataFrame(columns=['name', 'type', 'age', 'time_window', 'time', 'feature']),
-                               pd.DataFrame({'name': [], 'type': [], 'age': [],
-                                             'time_window': [], 'time': [], 'feature': []})]
-        time_window = 1
-        for reference_feature_values in ref_feature_val_lst:
-            with self.assertRaises(ValueError):
-                self.type_spec_wgt.compute(reference_feature_values, time_window)
+        self.assertRaises(TypeError, self.weighting_function.compute, ref_meta_info, current_meta_info)
 
-    def test_values_of_time_window(self):
-        reference_feature_values = pd.DataFrame({'name': ['name'], 'type': ['TYPE'], 'age': [1.0],
-                                                 'time_window': [0], 'time': [None], 'feature': [1.0]})
-        time_window_lst = [0, -1]
-        for time_window in time_window_lst:
-            with self.assertRaises(ValueError):
-                self.type_spec_wgt.compute(reference_feature_values, time_window)
+    def test_empty_input_with_incorrect_columns(self):
+        ref_meta_info = pd.DataFrame(columns=['name'])
+        current_meta_info = pd.Series({})
 
-    def test_type_mismatches(self):
-        time_window = 1
-        df = pd.DataFrame({'name': [None], 'type': ['BLOCKED_USER'], 'age': [None],
-                           'time_window': [1], 'time': [None], 'feature': [None]})
-        with self.assertRaises(ValueError):
-            self.type_spec_wgt.compute(df, time_window)
+        self.assertRaises(ValueError, self.weighting_function.compute, ref_meta_info, current_meta_info)
 
-    def test_functionality(self):
-        time_window = 1
-        dfs = [pd.DataFrame({'name': [None], 'type': ['GUEST'], 'age': [None],
-                             'time_window': [1], 'time': [None], 'feature': [None]}),
-               pd.DataFrame({'name': [None], 'type': ['USER'], 'age': [None],
-                             'time_window': [1], 'time': [None], 'feature': [None]}),
-               pd.DataFrame({'name': [None], 'type': ['ADMIN'], 'age': [None],
-                             'time_window': [1], 'time': [None], 'feature': [None]})]
-        weight_dfs_check = [pd.DataFrame({'time_window': [1], 'weight': [0.5]}),
-                            pd.DataFrame({'time_window': [1], 'weight': [0.75]}),
-                            pd.DataFrame({'time_window': [1], 'weight': [1.0]})]
+    def test_empty_input_with_correct_columns(self):
+        ref_meta_info = pd.DataFrame(columns=['type'])
+        current_meta_info = pd.Series({})
 
-        for index, df in enumerate(dfs):
-            weight_df = self.type_spec_wgt.compute(df, time_window)
-            pd.testing.assert_frame_equal(weight_df, weight_dfs_check[index])
+        np.testing.assert_array_equal(self.weighting_function.compute(ref_meta_info, current_meta_info), np.array([]))
+
+    def test_single_ref_observation(self):
+        ref_meta_info = pd.DataFrame({'type': ['USER']})
+        current_meta_info = pd.Series()
+
+        np.testing.assert_array_almost_equal(self.weighting_function.compute(ref_meta_info, current_meta_info),
+                                             np.array([0.75]))
+
+    def test_multiple_ref_observations(self):
+        ref_meta_info = pd.DataFrame({'type': ['USER', 'USER', 'GUEST', 'ADMIN']})
+        current_meta_info = pd.Series()
+
+        np.testing.assert_array_almost_equal(self.weighting_function.compute(ref_meta_info, current_meta_info),
+                                             np.array([0.75, 0.75, 0.5, 1.0]))
+
+    def test_unknown_type(self):
+        ref_meta_info = pd.DataFrame({'type': ['BLOCKED_USER']})
+        current_meta_info = pd.Series({})
+
+        self.assertRaises(ValueError, self.weighting_function.compute, ref_meta_info, current_meta_info)

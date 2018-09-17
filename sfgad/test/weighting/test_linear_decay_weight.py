@@ -1,63 +1,66 @@
 from unittest import TestCase
 
+import numpy as np
 import pandas as pd
 
-from sfgad.modules.weighting.weighting import Weighting
+from sfgad.modules.weighting import LinearDecayWeight
 
 
-class TestConstantWeight(TestCase):
+class TestLinearWeight(TestCase):
     def setUp(self):
-        from sfgad.modules.weighting.linear_decay_weight import LinearDecayWeight
-        self.lin_dec_wgt = LinearDecayWeight(factor=0.75)
+        self.weighting_function = LinearDecayWeight(factor=0.25)
 
-    def test_class_type_check(self):
-        self.assertTrue(isinstance(self.lin_dec_wgt, Weighting))
+    def test_ref_observations_not_as_dataframe(self):
+        # Basically a valid input, but a numpy array instead of a pandas DataFrame
+        # The numpy array is an invalid input since it lacks indication of columns
+        ref_meta_info = np.array([[1, 2, 3, 4]])
+        current_meta_info = pd.Series({'time_window': 4})
 
-    def test_type_of_reference_feature_values(self):
-        reference_feature_values_lst = [None, 10, 'test_string', 2.0]
-        time_window = 1
-        for reference_feature_values in reference_feature_values_lst:
-            with self.assertRaises(TypeError):
-                self.lin_dec_wgt.compute(reference_feature_values, time_window)
+        self.assertRaises(TypeError, self.weighting_function.compute, ref_meta_info, current_meta_info)
 
-    def test_type_of_time_window(self):
-        reference_feature_values = pd.DataFrame()
-        time_window_lst = [None, 'test', pd.DataFrame(), 2.0]
-        for time_window in time_window_lst:
-            with self.assertRaises(TypeError):
-                self.lin_dec_wgt.compute(reference_feature_values, time_window)
+    def test_current_observation_not_as_series(self):
+        # Basically a valid input, but a numpy array instead of a pandas DataFrame
+        # The numpy array is an invalid input since it lacks indication of columns
+        ref_meta_info = pd.DataFrame({'time_window': [1, 2, 3, 4]})
+        current_meta_info = np.array([1])
 
-    def test_values_of_reference_feature_values(self):
-        ref_feature_val_lst = [pd.DataFrame(),
-                               pd.DataFrame(columns=['name', 'type', 'age', 'time_window', 'time', 'feature']),
-                               pd.DataFrame({'name': [], 'type': [], 'age': [],
-                                             'time_window': [], 'time': [], 'feature': []})]
-        time_window = 1
-        for reference_feature_values in ref_feature_val_lst:
-            with self.assertRaises(ValueError):
-                self.lin_dec_wgt.compute(reference_feature_values, time_window)
+        self.assertRaises(TypeError, self.weighting_function.compute, ref_meta_info, current_meta_info)
 
-    def test_values_of_time_window(self):
-        reference_feature_values = pd.DataFrame({'name': ['name'], 'type': ['TYPE'], 'age': [1.0],
-                                                 'time_window': [0], 'time': [None], 'feature': [1.0]})
-        time_window_lst = [0, -1]
-        for time_window in time_window_lst:
-            with self.assertRaises(ValueError):
-                self.lin_dec_wgt.compute(reference_feature_values, time_window)
+    def test_empty_ref_observations_with_incorrect_columns(self):
+        ref_meta_info = pd.DataFrame(columns=['type'])
+        current_meta_info = pd.Series({'time_window': 4})
 
-    def test_functionality(self):
-        time_window_lst = [1, 2, 3]
-        dfs = [pd.DataFrame({'name': [None], 'type': [None], 'age': [None],
-                             'time_window': [1], 'time': [None], 'feature': [None]}),
-               pd.DataFrame({'name': [None, None], 'type': [None, None], 'age': [None, None],
-                             'time_window': [1, 2], 'time': [None, None], 'feature': [None, None]}),
-               pd.DataFrame({'name': [None, None, None], 'type': [None, None, None], 'age': [None, None, None],
-                             'time_window': [1, 2, 3], 'time': [None, None, None], 'feature': [None, None, None]})]
+        self.assertRaises(ValueError, self.weighting_function.compute, ref_meta_info, current_meta_info)
 
-        weight_dfs_check = [pd.DataFrame({'time_window': [1], 'weight': [1.0]}),
-                            pd.DataFrame({'time_window': [1, 2], 'weight': [0.25, 1]}),
-                            pd.DataFrame({'time_window': [1, 2, 3], 'weight': [0, 0.25, 1]})]
+    def test_empty_ref_observations_with_correct_columns(self):
+        ref_meta_info = pd.DataFrame(columns=['time_window'])
+        current_meta_info = pd.Series({'time_window': 4})
 
-        for index, time_window in enumerate(time_window_lst):
-            weight_df = self.lin_dec_wgt.compute(dfs[index], time_window)
-            pd.testing.assert_frame_equal(weight_df, weight_dfs_check[index])
+        np.testing.assert_array_equal(self.weighting_function.compute(ref_meta_info, current_meta_info), np.array([]))
+
+    def test_current_observation_with_incorrect_columns(self):
+        ref_meta_info = pd.DataFrame({'time_window': [3]})
+        current_meta_info = pd.Series({'type': 4})
+
+        self.assertRaises(ValueError, self.weighting_function.compute, ref_meta_info, current_meta_info)
+
+    def test_single_ref_observation(self):
+        ref_meta_info = pd.DataFrame({'time_window': [3]})
+        current_meta_info = pd.Series({'time_window': 4})
+
+        np.testing.assert_array_almost_equal(self.weighting_function.compute(ref_meta_info, current_meta_info),
+                                             np.array([0.75]))
+
+    def test_clipped_ref_observation(self):
+        ref_meta_info = pd.DataFrame({'time_window': [0]})
+        current_meta_info = pd.Series({'time_window': 5})
+
+        np.testing.assert_array_almost_equal(self.weighting_function.compute(ref_meta_info, current_meta_info),
+                                             np.array([0]))
+
+    def test_multiple_ref_observations(self):
+        ref_meta_info = pd.DataFrame({'time_window': [1, 2, 3, 4]})
+        current_meta_info = pd.Series({'time_window': 4})
+
+        np.testing.assert_array_almost_equal(self.weighting_function.compute(ref_meta_info, current_meta_info),
+                                             np.array([0.25, 0.5, 0.75, 1.0]))
