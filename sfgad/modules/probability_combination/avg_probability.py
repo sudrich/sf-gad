@@ -1,5 +1,6 @@
 import numpy as np
 
+from sfgad.utils.valiation import check_p_values
 from .probability_combiner import ProbabilityCombiner
 
 
@@ -12,17 +13,21 @@ class AvgProbability(ProbabilityCombiner):
         :return: The combined p-value.
         """
 
+        p_values = check_p_values(p_values)
+
+        # if type(p_values) == list:
+        #    p_values = np.array([p_values])
         # assert p_values is a list
-        assert type(p_values) == list
+        # assert type(p_values) == list
 
         # check that p_values is not empty
-        if len(p_values) == 0:
-            raise ValueError('The given list of p_values is empty')
+        # if len(p_values) == 0:
+        #    raise ValueError('The given list of p_values is empty')
 
         # check that all elements in p_values are floats
-        if not all(isinstance(x, (int, float)) for x in p_values):
-            raise ValueError('The elements in p_values should all be of the type \'float\'')
+        # if not all(isinstance(x, (int, float)) for x in p_values):
+        #    raise ValueError('The elements in p_values should all be of the type \'float\'')
 
-        p = np.mean(p_values)
+        combined_p_values = np.mean(p_values, axis=1)
 
-        return p
+        return combined_p_values

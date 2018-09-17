@@ -1,3 +1,6 @@
+import numpy as np
+
+from sfgad.utils import check_p_values
 from .probability_combiner import ProbabilityCombiner
 
 
@@ -10,17 +13,19 @@ class FirstFeatureProbability(ProbabilityCombiner):
         :return: The combined p-value.
         """
 
-        # assert p_values is a list
-        assert type(p_values) == list
+        p_values = check_p_values(p_values)
 
-        # check that p_values is not empty
-        if len(p_values) == 0:
-            raise ValueError('The given list of p_values is empty')
+        # # assert p_values is a list
+        # assert type(p_values) == list
+        #
+        # # check that p_values is not empty
+        # if len(p_values) == 0:
+        #     raise ValueError('The given list of p_values is empty')
+        #
+        # # check that all elements in p_values are floats
+        # if not all(isinstance(x, (int, float)) for x in p_values):
+        #     raise ValueError('The elements in p_values should all be of the type \'float\'')
 
-        # check that all elements in p_values are floats
-        if not all(isinstance(x, (int, float)) for x in p_values):
-            raise ValueError('The elements in p_values should all be of the type \'float\'')
+        combined_p_values = np.take(p_values, 0, axis=1)
 
-        p = p_values[0]
-
-        return p
+        return combined_p_values

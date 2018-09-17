@@ -1,5 +1,7 @@
+import numpy as np
 from scipy.stats import combine_pvalues
 
+from sfgad.utils.valiation import check_p_values
 from .probability_combiner import ProbabilityCombiner
 
 
@@ -12,17 +14,19 @@ class FisherMethod(ProbabilityCombiner):
         :return: The combined p-value.
         """
 
-        # assert p_values is a list
-        assert type(p_values) == list
+        p_values = check_p_values(p_values)
 
-        # check that p_values is not empty
-        if len(p_values) == 0:
-            raise ValueError('The given list of p_values is empty')
+        # # assert p_values is a list
+        # assert type(p_values) == list
+        #
+        # # check that p_values is not empty
+        # if len(p_values) == 0:
+        #     raise ValueError('The given list of p_values is empty')
+        #
+        # # check that all elements in p_values are floats
+        # if not all(isinstance(x, (int, float)) for x in p_values):
+        #     raise ValueError('The elements in p_values should all be of the type \'float\'')
 
-        # check that all elements in p_values are floats
-        if not all(isinstance(x, (int, float)) for x in p_values):
-            raise ValueError('The elements in p_values should all be of the type \'float\'')
+        combined_p_values = np.apply_along_axis(lambda x: combine_pvalues(x, method='fisher')[1], axis=1, arr=p_values)
 
-        _, p = combine_pvalues(p_values, method='fisher', weights=None)
-
-        return p
+        return combined_p_values

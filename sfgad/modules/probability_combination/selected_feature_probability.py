@@ -1,3 +1,6 @@
+import numpy as np
+
+from sfgad.utils import check_p_values
 from .probability_combiner import ProbabilityCombiner
 
 
@@ -16,21 +19,23 @@ class SelectedFeatureProbability(ProbabilityCombiner):
         :return: The combined p-value.
         """
 
-        # assert p_values is a list
-        assert type(p_values) == list
-
-        # check that p_values is not empty
-        if len(p_values) == 0:
-            raise ValueError('The given list of p_values is empty')
-
-        # check that all elements in p_values are floats
-        if not all(isinstance(x, (int, float)) for x in p_values):
-            raise ValueError('The elements in p_values should all be of the type \'float\'')
+        p_values = check_p_values(p_values)
 
         # check that the given position of the feature is valid
-        if self.feature_position < 0 or self.feature_position >= len(p_values):
+        if self.feature_position < 0 or self.feature_position >= p_values.shape[1]:
             raise ValueError('The given feature position is invalid! The position should be in [0, %i)' % len(p_values))
 
-        p = p_values[self.feature_position]
+        # # assert p_values is a list
+        # assert type(p_values) == list
+        #
+        # # check that p_values is not empty
+        # if len(p_values) == 0:
+        #     raise ValueError('The given list of p_values is empty')
+        #
+        # # check that all elements in p_values are floats
+        # if not all(isinstance(x, (int, float)) for x in p_values):
+        #     raise ValueError('The elements in p_values should all be of the type \'float\'')
 
-        return p
+        combined_p_values = np.take(p_values, self.feature_position, axis=1)
+
+        return combined_p_values

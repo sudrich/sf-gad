@@ -14,16 +14,16 @@ class TestMaxProbability(TestCase):
         self.assertEqual(self.combiner.combine(p_values), 0.21)
 
     def test_combine_empty_list(self):
-        p_values = []
+        empty_list = []
 
         # expect a value error
-        self.assertRaises(ValueError, self.combiner.combine, p_values)
+        self.assertRaises(ValueError, self.combiner.combine, empty_list)
 
-    def test_combine_type_list(self):
-        p_values = 42
+    def test_combine_non_convertible_type(self):
+        invalid_input = 'string_that_is_not_an_array_or_list'
 
         # expect an assertion error
-        self.assertRaises(AssertionError, self.combiner.combine, p_values)
+        self.assertRaises(ValueError, self.combiner.combine, invalid_input)
 
     def test_combine_type_elements(self):
         p_values = [0.21, 0.12, 'A', 0.15, 0.067]
