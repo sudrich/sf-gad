@@ -2,11 +2,9 @@ language: python
 python:
   - "3.5"
 # command to install dependencies
-before-install:
-  - pip install -U pip
-  - python setup.py install
 install:
   - pip install -r requirements.txt
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
   - pip install -e .
 # command to run tests
 script: pytest
