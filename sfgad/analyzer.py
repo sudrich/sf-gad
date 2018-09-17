@@ -146,7 +146,7 @@ class Analyzer(SequentialAnalyzer):
                                                                 f.names]]
 
                 # Combine the multiple p_values into a single p_value for the vertex
-                p_value = self.probability_combiner.combine(feature_probabilities, reference_feature_probabilities)
+                p_value = self.probability_combiner.combine(feature_probabilities, reference_feature_probabilities)[0]
 
             p_f_df_row = dict({'name': v.name}, **{'p_' + f: p_f_value for f, p_f_value in
                                                    zip([f_name for f in self.features_list for f_name in f.names],
