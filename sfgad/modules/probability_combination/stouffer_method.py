@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import combine_pvalues
 
-from sfgad.utils.valiation import check_p_values
+from sfgad.utils.validation import check_p_values
 from .probability_combiner import ProbabilityCombiner
 
 

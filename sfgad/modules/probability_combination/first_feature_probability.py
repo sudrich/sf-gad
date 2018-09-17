@@ -1,6 +1,6 @@
 import numpy as np
 
-from sfgad.utils import check_p_values
+from sfgad.utils.validation import check_p_values
 from .probability_combiner import ProbabilityCombiner
 
 
