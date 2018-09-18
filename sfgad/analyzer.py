@@ -128,22 +128,20 @@ class Analyzer(SequentialAnalyzer):
                 p_value = np.nan
                 feature_probabilities = [np.nan for f in self.features_list for name in f.names]
             else:
-                reference_features = observations[['time_window'] +
-                                                  [name for f in self.features_list for name in
-                                                   f.names]]
+                reference_features = observations[
+                    ['time_window'] + [name for f in self.features_list for name in f.names]]
 
                 # Get list of weights for every window
-                weights = self.weighting_function.compute(reference_features, self.time_window)
+                weights = self.weighting_function.compute(reference_features,
+                                                          pd.Series({'time_window': self.time_window, 'type': v.type}))
 
                 # Get a list of calculated p_values for every feature
                 feature_probabilities = self.probability_estimator.estimate(
-                    features_grouped.get_group(v.name)[[name for f in self.features_list for name in
-                                                        f.names]],
+                    features_grouped.get_group(v.name)[[name for f in self.features_list for name in f.names]],
                     reference_features, weights)
 
-                reference_feature_probabilities = observations[['name', 'time_window'] +
-                                                               ['p_' + name for f in self.features_list for name in
-                                                                f.names]]
+                reference_feature_probabilities = observations[
+                    ['name', 'time_window'] + ['p_' + name for f in self.features_list for name in f.names]]
 
                 # Combine the multiple p_values into a single p_value for the vertex
                 p_value = self.probability_combiner.combine(feature_probabilities, reference_feature_probabilities)[0]

@@ -24,7 +24,7 @@ class TestAnalyzer(TestCase):
 
         features_list = [VertexDegree()]
         observation_gatherer = HistoricAllSelection()
-        weighting_function = ConstantWeight(default_weight=1)
+        weighting_function = ConstantWeight(weight=1)
         probability_estimator = EmpiricalEstimator()
         probability_combiner = AvgProbability()
         n_jobs = 1
