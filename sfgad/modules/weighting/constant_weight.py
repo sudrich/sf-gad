@@ -16,4 +16,4 @@ class ConstantWeight(Weighting):
         check_meta_info_dataframe(reference_meta_info, required_columns=[])
         check_meta_info_series(current_meta_info, required_columns=[])
 
-        return np.full(len(reference_meta_info), self.weight)
+        return np.full(len(reference_meta_info), self.weight, np.float64)
