@@ -18,9 +18,7 @@ class TestEmpiricalEstimator(TestCase):
             data={'Feature_A': [40, 45, 42, 39, 43], 'Feature_B': [0, 1, 0, 1, 2], 'time_window': [0, 1, 2, 3, 4]},
             columns=['Feature_A', 'Feature_B', 'time_window'])
 
-        self.weights = pd.DataFrame(
-            data={'weight': np.ones(5, dtype=int), 'time_window': [0, 1, 2, 3, 4]},
-            columns=['weight', 'time_window'])
+        self.weights = np.ones(5, dtype=int)
 
     def test_estimator_output(self):
         # test the right output with direction='left-tailed'
