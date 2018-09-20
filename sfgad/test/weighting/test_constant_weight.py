@@ -8,7 +8,14 @@ from sfgad.modules.weighting import ConstantWeight
 
 class TestConstantWeight(TestCase):
     def setUp(self):
-        self.weighting_function = ConstantWeight(weight=1)
+        self.weighting_function = ConstantWeight()
+
+    def test_init_default(self):
+        self.assertAlmostEqual(self.weighting_function.weight, 1.0)
+
+    def test_init_custom(self):
+        self.weighting_function = ConstantWeight(weight=0.5)
+        self.assertAlmostEqual(self.weighting_function.weight, 0.5)
 
     def test_ref_observations_not_as_dataframe(self):
         # Basically a valid input, but a numpy array instead of a pandas DataFrame

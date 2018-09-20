@@ -11,6 +11,16 @@ class TestTypeSpecificWeight(TestCase):
         type_dict = {'GUEST': 0.5, 'USER': 0.75, 'ADMIN': 1.0}
         self.weighting_function = TypeSpecificWeight(type_dict)
 
+    def test_init_custom(self):
+        type_dict = {'GUEST': 0.5, 'USER': 0.75, 'ADMIN': 1.0}
+        self.weighting_function = TypeSpecificWeight(type_dict)
+        self.assertAlmostEqual(self.weighting_function.type_dict, type_dict)
+
+    def test_init_empty_dict(self):
+        type_dict = {}
+        self.weighting_function = TypeSpecificWeight(type_dict)
+        self.assertAlmostEqual(self.weighting_function.type_dict, {})
+
     def test_ref_observations_not_as_dataframe(self):
         # Basically a valid input, but a numpy array instead of a pandas DataFrame
         # The numpy array is an invalid input since it lacks indication of columns

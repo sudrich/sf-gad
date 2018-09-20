@@ -10,6 +10,14 @@ class TestLinearWeight(TestCase):
     def setUp(self):
         self.weighting_function = LinearDecayWeight(factor=0.25)
 
+    def test_init_custom_1(self):
+        self.weighting_function = LinearDecayWeight(factor=1.0)
+        self.assertAlmostEqual(self.weighting_function.factor, 1.0)
+
+    def test_init_custom_2(self):
+        self.weighting_function = LinearDecayWeight(factor=2.0)
+        self.assertAlmostEqual(self.weighting_function.factor, 2.0)
+
     def test_ref_observations_not_as_dataframe(self):
         # Basically a valid input, but a numpy array instead of a pandas DataFrame
         # The numpy array is an invalid input since it lacks indication of columns
