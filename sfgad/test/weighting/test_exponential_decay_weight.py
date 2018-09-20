@@ -11,6 +11,9 @@ class TestExponentialWeight(TestCase):
     def setUp(self):
         self.weighting_function = ExponentialDecayWeight(half_life=1.0)
 
+    def test_init_zero(self):
+        self.assertRaises(ValueError, ExponentialDecayWeight, 0.0)
+
     def test_init_custom_1(self):
         self.weighting_function = ExponentialDecayWeight(half_life=1.0)
         self.assertAlmostEqual(self.weighting_function.decay_lambda, math.log(2))

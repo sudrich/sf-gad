@@ -13,6 +13,8 @@ class ExponentialDecayWeight(Weighting):
     """
 
     def __init__(self, half_life):
+        if half_life <= 0:
+            raise ValueError("The half-life period was %d, but must be a number >= 0." % half_life)
         self.decay_lambda = math.log(2) / half_life
 
     def compute(self, reference_meta_info, current_meta_info):
