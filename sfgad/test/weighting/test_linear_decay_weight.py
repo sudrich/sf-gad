@@ -10,6 +10,10 @@ class TestLinearWeight(TestCase):
     def setUp(self):
         self.weighting_function = LinearDecayWeight(factor=0.25)
 
+    def test_init_zero(self):
+        self.weighting_function = LinearDecayWeight(factor=0.0)
+        self.assertAlmostEqual(self.weighting_function.factor, 0.0)
+
     def test_init_custom_1(self):
         self.weighting_function = LinearDecayWeight(factor=1.0)
         self.assertAlmostEqual(self.weighting_function.factor, 1.0)

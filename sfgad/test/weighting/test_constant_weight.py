@@ -10,6 +10,10 @@ class TestConstantWeight(TestCase):
     def setUp(self):
         self.weighting_function = ConstantWeight()
 
+    def test_init_zero(self):
+        self.weighting_function = ConstantWeight(weight=0.0)
+        self.assertAlmostEqual(self.weighting_function.weight, 0.0)
+
     def test_init_default(self):
         self.assertAlmostEqual(self.weighting_function.weight, 1.0)
 
