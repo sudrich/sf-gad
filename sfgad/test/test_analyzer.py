@@ -78,4 +78,4 @@ class TestAnalyzer(TestCase):
     def test_result_df_dtypes(self):
         result = self.analyzer.fit_transform(self.dfs[0])
 
-        self.assertEqual(result.dtypes.tolist(), [np.dtype('O'), np.dtype(int), np.dtype(float)])
+        self.assertEqual(result.dtypes.tolist(), [np.object_, np.int64, np.float64])

@@ -129,7 +129,7 @@ class Analyzer(SequentialAnalyzer):
                 feature_probabilities = [np.nan for f in self.features_list for name in f.names]
             else:
                 reference_features = observations[
-                    ['time_window'] + [name for f in self.features_list for name in f.names]]
+                    [name for f in self.features_list for name in f.names]]
 
                 # Get list of weights for every window
                 weights = self.weighting_function.compute(reference_features,

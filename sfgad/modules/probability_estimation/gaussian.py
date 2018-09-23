@@ -1,20 +1,42 @@
-import math
-
 import numpy as np
-import pandas as pd
 import scipy.stats as st
 
+from sfgad.utils.validation import check_is_fitted, check_weights, check_observations, check_reference_observations
 from .probability_estimator import ProbabilityEstimator
 
 
 class Gaussian(ProbabilityEstimator):
-    def __init__(self, direction='left-tailed'):
-
+    def __init__(self, direction='right-tailed'):
         if direction not in ['right-tailed', 'left-tailed', 'two-tailed']:
-            raise ValueError("The given direction for probability calculation is not known! "
+            raise ValueError("The given direction for probability calculation is unknown! "
                              "Possible directions are: 'right-tailed', 'left-tailed' & 'two-tailed'.")
 
         self.direction = direction
+
+    def fit(self, reference_observations, weights):
+        reference_observations = check_reference_observations(reference_observations)
+        weights = check_weights(weights, reference_observations)
+
+        self.means = np.average(reference_observations, axis=0, weights=weights)
+        self.stds = np.sqrt(np.average((reference_observations - self.means) ** 2, axis=0, weights=weights))
+
+    def transform(self, observations):
+        check_is_fitted(self, ["means", "stds"])
+        observations = check_observations(observations, n_features=len(self.means))
+
+        if self.direction == 'right-tailed':
+            p_values = 1 - st.norm.cdf(observations, self.means, self.stds)
+        elif self.direction == 'left-tailed':
+            p_values = st.norm.cdf(observations, self.means, self.stds)
+        else:
+            p_values_right = 1 - st.norm.cdf(observations, self.means, self.stds)
+            p_values_left = st.norm.cdf(observations, self.means, self.stds)
+            p_values = 2 * np.minimum(p_values_right, p_values_left)
+
+        # Fill all nan values with 1.0. This happens if the standard deviation is zero.
+        p_values[np.isnan(p_values)] = 1.0
+
+        return p_values
 
     def estimate(self, features_values, reference_features_values, weights):
         """
@@ -28,101 +50,5 @@ class Gaussian(ProbabilityEstimator):
         :return: List of p_values.
         """
 
-        ### INPUT VALIDATION
-
-        if not isinstance(features_values, pd.DataFrame) \
-                or not isinstance(reference_features_values, pd.DataFrame) \
-                or not isinstance(weights, np.ndarray):
-            raise ValueError("The given arguments 'feature_values', 'reference_features_values' should "
-                             "be a DataFrame and 'weights' a numpy array.")
-
-        # check that features_values has 1 row and >= 1 columns
-        if features_values.shape[0] != 1:
-            raise ValueError("The given argument 'feature_values' should have exactly 1 row with data and a column for "
-                             "each feature!")
-
-        # check that reference_features_values has >= 1 rows and n+1 columns
-        if not reference_features_values.shape[0] >= 1 \
-                or reference_features_values.shape[1] != (features_values.shape[1] + 1):
-            raise ValueError("The given argument 'reference_features_values' should have >= 1 rows with data and a "
-                             "column for each feature and the time_window!")
-
-        # check that weights has m rows and 2 columns
-        if weights.shape[0] != reference_features_values.shape[0]:
-            raise ValueError(
-                "The given argument 'weights' should have exactly the same number of rows as "
-                "'reference_features_values'!")
-
-        # check that reference_features_values has the column 'time_window'
-        if 'time_window' not in reference_features_values.columns.values.tolist():
-            raise ValueError("The given argument 'reference_features_values' should have the column 'time_window'!")
-
-        # check that the feature names in features_values and reference_features_values are the same
-        if set().union(*[features_values.columns.values.tolist(), ['time_window']]) != \
-                set(reference_features_values.columns.values.tolist()):
-            raise ValueError("The given arguments 'feature_values' & 'reference_features_values' should have the same "
-                             "columns with feature names!")
-
-        # check that the values of each feature are all floats (or integers)
-        for feature_name in features_values.columns.values.tolist():
-            if not isinstance(features_values.iloc[0][feature_name], (int, np.int64, float, np.float64)):
-                raise ValueError(
-                    "The values of each feature in features_values should all be of the type 'int' or 'float'")
-            if not all(
-                    isinstance(x, (int, np.int64, float, np.float64)) for x in reference_features_values[feature_name]):
-                raise ValueError(
-                    "The values of each feature in reference_features_values should all be of the type 'int' or "
-                    "'float'")
-
-        # check that the values of the time windows are all floats (or integers)
-        if not all(isinstance(x, (int, np.int64, float, np.float64)) for x in reference_features_values['time_window']):
-            raise ValueError(
-                "The values of the time windows in reference_features_values should all be of the type 'int' or "
-                "'float'!")
-
-        ### FUNCTION CODE
-
-
-        # Get a list of all the features for building an easy iterable
-        features_list = features_values.columns.values.tolist()
-
-        p_values_list = []
-
-        for feature_name in features_list:
-
-            # This is the feature value for the current feature of the vertex in question
-            feature_value = features_values.iloc[0][feature_name]
-
-            mean, sd = self.weighted_mean_and_sd(reference_features_values[feature_name], weights)
-
-            if self.direction == 'right-tailed':
-                p_value = 1 - st.norm.cdf(feature_value, mean, sd)
-
-            elif self.direction == 'left-tailed':
-                p_value = st.norm.cdf(feature_value, mean, sd)
-
-            else:
-                p_value_right = 1 - st.norm.cdf(feature_value, mean, sd)
-                p_value_left = st.norm.cdf(feature_value, mean, sd)
-
-                p_value = 2 * min(p_value_right, p_value_left)
-
-            # Add the calculated p_value to the list of p_values for this vertex
-            p_values_list.append(p_value)
-
-        # Return the completed list
-        return p_values_list
-
-    def weighted_mean_and_sd(self, values, weights):
-        """
-        Returns the weighted mean and standard deviation of the given values weighted by the given weights.
-        :param values: the given feature values.
-        :param weights: the weights for the values.
-        :return: Weighted mean and standard deviation.
-        """
-        isnan = np.isnan(values)
-
-        mean = np.average(values[~isnan], weights=weights[~isnan])
-        variance = np.average((values[~isnan] - mean) ** 2, weights=weights[~isnan])
-
-        return mean, math.sqrt(variance)
+        self.fit(reference_features_values, weights)
+        return self.transform(features_values)
